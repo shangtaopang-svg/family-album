@@ -1626,8 +1626,136 @@
             const [activeTab, setActiveTab] = useState('家人');
             const [password, setPassword] = useState('');
             const [isAuthenticated, setIsAuthenticated] = useState(false);
+            const [githubToken, setGithubToken] = useState(localStorage.getItem('githubToken') || '');
+            const [uploading, setUploading] = useState(false);
             
             const tabs = ['家人', '音乐', '轮播', '时间线', '发育', '荣誉', '爱好', '相册', '视频', '里程碑'];
+            
+            // GitHub上传函数
+            const uploadToGitHub = async (file, category) => {
+                if (!githubToken) {
+                    alert('请先设置 GitHub Token');
+                    return null;
+                }
+                
+                const owner = 'shangtaopang-svg';
+                const repo = 'family-album';
+                const timestamp = Date.now();
+                const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+                const path = `photos/${category}/${timestamp}-${safeName}`;
+                
+                const base64 = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result.split(',')[1]);
+                    reader.readAsDataURL(file);
+                });
+                
+                try {
+                    // 检查文件是否已存在
+                    const checkRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                        headers: { 'Authorization': `token ${githubToken}` }
+                    });
+                    
+                    let sha = null;
+                    if (checkRes.ok) {
+                        const existing = await checkRes.json();
+                        sha = existing.sha;
+                    }
+                    
+                    // 上传文件
+                    const body = {
+                        message: `Upload ${category}/${file.name}`,
+                        content: base64
+                    };
+                    if (sha) body.sha = sha;
+                    
+                    const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `token ${githubToken}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(body)
+                    });
+                    
+                    if (res.ok) {
+                        const data = await res.json();
+                        return data.content.download_url;
+                    } else {
+                        console.error('Upload failed:', await res.text());
+                        return null;
+                    }
+                } catch (err) {
+                    console.error('Upload error:', err);
+                    return null;
+                }
+            };
+            
+            const handleGalleryUpload = async (category, e) => {
+                const files = Array.from(e.target.files);
+                setUploading(true);
+                
+                for (const file of files) {
+                    if (githubToken) {
+                        // GitHub上传模式
+                        const url = await uploadToGitHub(file, category);
+                        if (url) {
+                            const newItem = {
+                                id: Date.now() + Math.random(),
+                                date: new Date().toLocaleDateString('zh-CN'),
+                                title: file.name.replace(/\.[^/.]+$/, ''),
+                                img: url
+                            };
+                            setEditData(prev => ({
+                                ...prev,
+                                gallery: {
+                                    ...prev.gallery,
+                                    [category]: [...(prev.gallery[category] || []), newItem]
+                                }
+                            }));
+                        } else {
+                            // 回退到本地
+                            const reader = new FileReader();
+                            reader.onload = (ev) => {
+                                const newItem = {
+                                    id: Date.now() + Math.random(),
+                                    date: new Date().toLocaleDateString('zh-CN'),
+                                    title: file.name.replace(/\.[^/.]+$/, ''),
+                                    img: ev.target.result
+                                };
+                                setEditData(prev => ({
+                                    ...prev,
+                                    gallery: {
+                                        ...prev.gallery,
+                                        [category]: [...(prev.gallery[category] || []), newItem]
+                                    }
+                                }));
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    } else {
+                        // 本地上传模式
+                        const reader = new FileReader();
+                        reader.onload = (ev) => {
+                            const newItem = {
+                                id: Date.now() + Math.random(),
+                                date: new Date().toLocaleDateString('zh-CN'),
+                                title: file.name.replace(/\.[^/.]+$/, ''),
+                                img: ev.target.result
+                            };
+                            setEditData(prev => ({
+                                ...prev,
+                                gallery: {
+                                    ...prev.gallery,
+                                    [category]: [...(prev.gallery[category] || []), newItem]
+                                }
+                            }));
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }
+                setUploading(false);
+            };
             
             const handleAuth = () => {
                 if (password === ADMIN_PASSWORD) {
@@ -1635,6 +1763,11 @@
                 } else {
                     alert('密码错误');
                 }
+            };
+            
+            const handleSaveGithubToken = () => {
+                localStorage.setItem('githubToken', githubToken);
+                alert('GitHub Token 已保存！上传照片将自动同步到 GitHub 仓库。');
             };
             
             const updateField = (section, idx, field, value) => {
@@ -1670,21 +1803,36 @@
                 }
             };
             
-            const handleFamilyPhotoUpload = (memberIdx, e) => {
+            const handleFamilyPhotoUpload = async (memberIdx, e) => {
                 const files = Array.from(e.target.files);
-                const newPhotos = [...editData.family[memberIdx].photos || []];
-                files.forEach(file => {
-                    const reader = new FileReader();
-                    reader.onload = (ev) => {
-                        newPhotos.push(ev.target.result);
-                        setEditData(prev => {
-                            const updated = [...prev.family];
-                            updated[memberIdx] = { ...updated[memberIdx], photos: [...newPhotos] };
-                            return { ...prev, family: updated };
-                        });
-                    };
-                    reader.readAsDataURL(file);
-                });
+                setUploading(true);
+                const newPhotos = [...(editData.family[memberIdx].photos || [])];
+                
+                for (const file of files) {
+                    if (githubToken) {
+                        const url = await uploadToGitHub(file, 'family');
+                        if (url) {
+                            newPhotos.push(url);
+                        } else {
+                            const reader = new FileReader();
+                            reader.onload = (ev) => newPhotos.push(ev.target.result);
+                            reader.readAsDataURL(file);
+                        }
+                    } else {
+                        const reader = new FileReader();
+                        reader.onload = (ev) => newPhotos.push(ev.target.result);
+                        reader.readAsDataURL(file);
+                    }
+                }
+                
+                setTimeout(() => {
+                    setEditData(prev => {
+                        const updated = [...prev.family];
+                        updated[memberIdx] = { ...updated[memberIdx], photos: [...newPhotos] };
+                        return { ...prev, family: updated };
+                    });
+                }, files.length * 100);
+                setUploading(false);
             };
             
             const handleGalleryUpload = (category, e) => {
@@ -1749,6 +1897,27 @@
                                 </button>
                             ))}
                         </div>
+                        
+                        {isAuthenticated && (
+                            <div className="admin-section" style={{ marginBottom: '1rem', background: '#fff5e6' }}>
+                                <h3 className="admin-section-title" style={{ color: 'var(--accent)' }}>🔗 GitHub 云同步</h3>
+                                <p style={{ fontSize: '0.85rem', color: 'var(--text-medium)', marginBottom: '0.8rem' }}>
+                                    设置 GitHub Token 后，上传的照片将自动同步到仓库，所有设备都能看到。
+                                </p>
+                                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                    <input
+                                        type="password"
+                                        className="admin-input"
+                                        value={githubToken}
+                                        onChange={e => setGithubToken(e.target.value)}
+                                        placeholder="粘贴 GitHub Token..."
+                                        style={{ flex: 1 }}
+                                    />
+                                    <button className="admin-btn admin-btn-save" onClick={handleSaveGithubToken}>保存</button>
+                                </div>
+                                {githubToken && <p style={{ fontSize: '0.75rem', color: 'var(--text-light)', marginTop: '0.5rem' }}>✓ Token 已设置，照片将自动同步到 GitHub</p>}
+                            </div>
+                        )}
                         
                         {activeTab === '家人' && (
                             <div>
@@ -1920,7 +2089,9 @@
                                             ))}
                                         </div>
                                         <input type="file" accept="image/*" multiple id={`gallery-${category}`} style={{ display: 'none' }} onChange={e => handleGalleryUpload(category, e)} />
-                                        <label htmlFor={`gallery-${category}`} className="admin-upload-label" style={{ cursor: 'pointer' }}>+ 上传照片</label>
+                                        <label htmlFor={`gallery-${category}`} className="admin-upload-label" style={{ cursor: 'pointer' }}>
+                                            {uploading ? '⏳ 上传中...' : '+ 上传照片'}
+                                        </label>
                                     </div>
                                 ))}
                                 <button className="admin-btn admin-btn-add" style={{ marginTop: '1rem' }} onClick={() => {
