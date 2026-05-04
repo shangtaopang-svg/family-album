@@ -38,6 +38,7 @@
             overflow-x: hidden;
         }
         
+        /* Navigation */
         .nav {
             position: fixed;
             top: 0;
@@ -67,8 +68,6 @@
             letter-spacing: 0.05em;
         }
         
-        .nav-subtitle { font-size: 0.75rem; color: var(--text-light); font-weight: 400; }
-        
         .nav-links { display: flex; gap: 1.5rem; list-style: none; }
         
         .nav-link {
@@ -85,6 +84,7 @@
             white-space: nowrap;
         }
         
+        .nav-link:hover, .nav-link.active { color: var(--primary); }
         .nav-link::after {
             content: '';
             position: absolute;
@@ -95,38 +95,863 @@
             background: var(--accent);
             transition: width 0.3s ease;
         }
-        
-        .nav-link:hover, .nav-link.active { color: var(--primary); }
         .nav-link:hover::after, .nav-link.active::after { width: 100%; }
         
-        .admin-btn {
+        .nav-admin {
             background: var(--gradient);
             color: white;
-            border: none;
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 1.2rem;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
+            font-weight: 500;
             cursor: pointer;
-            font-family: inherit;
+            border: none;
             transition: transform 0.2s, box-shadow 0.2s;
         }
+        .nav-admin:hover { transform: translateY(-2px); box-shadow: 0 4px 12px var(--shadow-strong); }
         
-        .admin-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px var(--shadow-strong); }
+        /* Main Content */
+        .main { margin-top: 72px; }
         
-        /* Music Player */
-        .music-player {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 340px;
-            background: var(--white);
-            border-radius: 20px;
-            box-shadow: 0 8px 40px var(--shadow-strong);
-            z-index: 99;
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 70vh;
+            min-height: 500px;
             overflow: hidden;
         }
         
-        /* Atmosphere Effect Canvas */
+        .hero-slides {
+            position: relative;
+            height: 100%;
+            background: var(--bg-cream);
+        }
+        
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        
+        .hero-slide.active { opacity: 1; }
+        
+        .hero-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(61, 50, 41, 0.1), rgba(61, 50, 41, 0.5));
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 4rem;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            width: fit-content;
+        }
+        
+        .hero-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-info {
+            display: flex;
+            gap: 1.5rem;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+        }
+        
+        /* Mobile Music Link */
+        .mobile-music-link {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--gradient);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            z-index: 99;
+            box-shadow: 0 4px 15px var(--shadow-strong);
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-music-link { display: block; }
+            .nav-links { gap: 0.8rem; }
+            .nav-link { font-size: 0.75rem; }
+            .hero-title { font-size: 2rem; }
+            .hero-overlay { padding: 2rem; }
+        }
+        
+        /* Sections */
+        .section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
+            margin: 0.8rem auto 0;
+            border-radius: 2px;
+        }
+        
+        /* Family Section */
+        .family-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 0 1rem;
+        }
+        
+        .family-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .family-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px var(--shadow-strong);
+        }
+        
+        .family-avatar {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            background: var(--bg-cream);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+        
+        .family-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .family-info {
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .family-role {
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+        
+        .family-name {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .family-birthday {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        /* Photo Gallery */
+        .gallery-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .gallery-tab {
+            padding: 0.6rem 1.5rem;
+            border-radius: 20px;
+            background: var(--bg-cream);
+            color: var(--text-medium);
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+        }
+        
+        .gallery-tab.active, .gallery-tab:hover {
+            background: var(--gradient);
+            color: white;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .gallery-item {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            background: var(--bg-cream);
+            cursor: pointer;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .gallery-item:hover img { transform: scale(1.05); }
+        
+        .gallery-item-date {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            color: white;
+            font-size: 0.8rem;
+        }
+        
+        .gallery-item-title {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(255,255,255,0.95);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            color: var(--text-dark);
+        }
+        
+        /* Videos */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .video-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+        
+        .video-thumbnail {
+            position: relative;
+            aspect-ratio: 16/9;
+            background: var(--bg-cream);
+        }
+        
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .video-duration {
+            position: absolute;
+            bottom: 0.5rem;
+            right: 0.5rem;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+        
+        .video-info { padding: 1rem; }
+        .video-title { font-weight: 600; margin-bottom: 0.3rem; }
+        .video-date { color: var(--text-light); font-size: 0.85rem; }
+        
+        /* Growth Chart */
+        .growth-chart-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 30px var(--shadow);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Honor Wall */
+        .honor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .honor-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px var(--shadow);
+            display: flex;
+            gap: 1rem;
+            transition: transform 0.3s;
+        }
+        
+        .honor-card:hover { transform: translateY(-4px); }
+        
+        .honor-badge {
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+        
+        .honor-content h4 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .honor-org { color: var(--accent); font-size: 0.85rem; margin-bottom: 0.3rem; }
+        .honor-date { color: var(--text-light); font-size: 0.8rem; }
+        .honor-desc { color: var(--text-medium); font-size: 0.9rem; margin-top: 0.5rem; }
+        
+        /* Favorites */
+        .favorites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .favorite-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px var(--shadow);
+            transition: transform 0.3s;
+        }
+        
+        .favorite-card:hover { transform: translateY(-4px); }
+        
+        .favorite-avatar {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        
+        .favorite-info { padding: 1rem; text-align: center; }
+        .favorite-name { font-weight: 600; margin-bottom: 0.3rem; }
+        .favorite-desc { color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem; }
+        .favorite-tags { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
+        .favorite-tag {
+            background: var(--bg-cream);
+            color: var(--text-medium);
+            padding: 0.2rem 0.6rem;
+            border-radius: 10px;
+            font-size: 0.7rem;
+        }
+        
+        /* Timeline */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-left: 2rem;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--accent-light);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+            padding-left: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.4rem;
+            top: 0.3rem;
+            width: 14px;
+            height: 14px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 3px solid var(--bg-warm);
+        }
+        
+        .timeline-date { color: var(--accent); font-weight: 600; font-size: 0.9rem; margin-bottom: 0.3rem; }
+        .timeline-age { color: var(--text-light); font-size: 0.8rem; }
+        .timeline-title { font-family: 'Noto Serif SC', serif; font-size: 1.3rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .timeline-desc { color: var(--text-medium); }
+        .timeline-stats { display: flex; gap: 1rem; margin-top: 0.5rem; flex-wrap: wrap; }
+        .timeline-stat {
+            background: var(--bg-cream);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: var(--text-medium);
+        }
+        
+        /* Milestones */
+        .milestones-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .milestone-card {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            background: var(--bg-cream);
+        }
+        
+        .milestone-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .milestone-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+        }
+        
+        .milestone-icon { font-size: 2rem; margin-bottom: 0.3rem; }
+        .milestone-age { font-size: 0.8rem; opacity: 0.8; }
+        .milestone-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.3rem; }
+        .milestone-desc { font-size: 0.85rem; opacity: 0.9; }
+        
+        /* Music Player */
+        .music-player {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 30px var(--shadow);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .music-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .music-header h3 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+        
+        .music-now {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .music-album {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 1rem;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px var(--shadow);
+            background: var(--bg-cream);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .music-album img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .music-album-icon { font-size: 4rem; }
+        
+        .music-title { font-weight: 600; font-size: 1.1rem; margin-bottom: 0.2rem; }
+        .music-artist { color: var(--text-light); font-size: 0.9rem; }
+        
+        .music-progress {
+            margin-bottom: 1rem;
+        }
+        
+        .music-progress-bar {
+            height: 6px;
+            background: var(--bg-cream);
+            border-radius: 3px;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .music-progress-fill {
+            height: 100%;
+            background: var(--gradient);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.1s;
+        }
+        
+        .music-time {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 0.3rem;
+        }
+        
+        .music-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        
+        .music-ctrl {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-medium);
+            transition: color 0.2s, transform 0.2s;
+            padding: 0.5rem;
+        }
+        
+        .music-ctrl:hover { color: var(--primary); transform: scale(1.1); }
+        
+        .music-ctrl.play {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .music-playlist {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 1.5rem;
+            border-top: 1px solid var(--bg-cream);
+            padding-top: 1rem;
+        }
+        
+        .music-playlist-title {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .music-song {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.6rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .music-song:hover { background: var(--bg-warm); }
+        .music-song.active { background: var(--bg-cream); }
+        
+        .music-song-num {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .music-song.active .music-song-num { color: var(--accent); }
+        
+        .music-song-info { flex: 1; }
+        .music-song-name { font-size: 0.9rem; font-weight: 500; }
+        .music-song-singer { font-size: 0.75rem; color: var(--text-light); }
+        
+        .music-upload {
+            margin-top: 1rem;
+            text-align: center;
+        }
+        
+        .music-upload-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: var(--bg-cream);
+            border: none;
+            border-radius: 20px;
+            color: var(--text-medium);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .music-upload-btn:hover { background: var(--accent-light); }
+        
+        /* Admin Modal */
+        .admin-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .admin-modal.open { display: flex; }
+        
+        .admin-content {
+            background: var(--bg-warm);
+            width: 100%;
+            max-width: 900px;
+            margin: 2rem auto;
+            border-radius: 20px;
+            padding: 2rem;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--bg-cream);
+        }
+        
+        .admin-header h2 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .admin-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+        
+        .admin-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .admin-tab {
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            background: var(--bg-cream);
+            color: var(--text-medium);
+            font-size: 0.85rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        
+        .admin-tab.active, .admin-tab:hover {
+            background: var(--gradient);
+            color: white;
+        }
+        
+        .admin-section {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .admin-section-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .admin-item {
+            display: flex;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            border-radius: 10px;
+            background: var(--bg-warm);
+            margin-bottom: 0.8rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .admin-item img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: var(--bg-cream);
+        }
+        
+        .admin-item-fields { flex: 1; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        
+        .admin-input {
+            padding: 0.5rem 0.8rem;
+            border: 1px solid var(--bg-cream);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-family: inherit;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .admin-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .admin-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: none;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .admin-btn-save {
+            background: var(--gradient);
+            color: white;
+        }
+        
+        .admin-btn-save:hover { opacity: 0.9; }
+        
+        .admin-btn-danger {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .admin-btn-danger:hover { background: #ff5252; }
+        
+        .admin-btn-add {
+            background: var(--accent);
+            color: white;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+        
+        .admin-upload-preview {
+            max-width: 100px;
+            max-height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        .admin-image-upload {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .admin-image-upload input[type="file"] {
+            display: none;
+        }
+        
+        .admin-upload-label {
+            padding: 0.5rem 1rem;
+            background: var(--bg-cream);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            color: var(--text-medium);
+        }
+        
+        .admin-upload-label:hover { background: var(--accent-light); }
+        
+        /* Footer */
+        .footer {
+            background: var(--primary-dark);
+            color: rgba(255,255,255,0.8);
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer p { font-size: 0.9rem; }
+        .footer-heart { color: var(--accent); }
+        
+        /* Atmosphere Effects */
         .atmosphere-canvas {
             position: fixed;
             top: 0;
@@ -137,393 +962,65 @@
             z-index: 1;
         }
         
-        .music-toggle {
+        .atmosphere-toggle {
             position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 56px;
-            height: 56px;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            z-index: 99;
+            background: var(--gradient);
+            color: white;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            background: var(--gradient);
             border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px var(--shadow-strong);
+            transition: transform 0.2s;
+        }
+        
+        .atmosphere-toggle:hover { transform: translateY(-50%) scale(1.1); }
+        
+        .atmosphere-menu {
+            display: none;
+            position: fixed;
+            top: 50%;
+            right: 70px;
+            transform: translateY(-50%);
+            background: white;
+            border-radius: 15px;
+            padding: 0.5rem;
             box-shadow: 0 4px 20px var(--shadow-strong);
-            cursor: pointer;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            transition: transform 0.3s;
+            z-index: 99;
         }
         
-        .music-toggle:hover { transform: scale(1.1); }
-        .music-toggle.hidden { display: none; }
-        .music-toggle.playing { animation: pulse 1.5s infinite; }
+        .atmosphere-menu.open { display: block; }
         
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(212, 165, 116, 0.5); }
-            50% { box-shadow: 0 0 0 15px rgba(212, 165, 116, 0); }
-        }
-        
-        .music-main {
-            padding: 1.25rem;
-            border-bottom: 1px solid var(--bg-cream);
-        }
-        
-        .music-now {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-        
-        .music-album {
-            width: 56px;
-            height: 56px;
-            border-radius: 12px;
-            background: var(--gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            flex-shrink: 0;
-        }
-        
-        .music-info { flex: 1; min-width: 0; }
-        .music-title { font-size: 0.95rem; font-weight: 500; color: var(--text-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .music-artist { font-size: 0.8rem; color: var(--text-light); }
-        
-        .music-progress { margin-bottom: 0.75rem; }
-        .music-progress-bar { height: 4px; background: var(--bg-cream); border-radius: 2px; cursor: pointer; position: relative; }
-        .music-progress-fill { height: 100%; background: var(--gradient); border-radius: 2px; width: 0%; transition: width 0.1s; }
-        .music-time { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-light); margin-top: 0.3rem; }
-        
-        .music-controls { display: flex; align-items: center; justify-content: center; gap: 1.5rem; }
-        .music-ctrl { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-medium); transition: color 0.2s; padding: 0.5rem; }
-        .music-ctrl:hover { color: var(--primary); }
-        .music-ctrl.play { width: 48px; height: 48px; background: var(--gradient); border-radius: 50%; color: white; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
-        
-        .music-minimize { position: absolute; top: 0.5rem; right: 0.5rem; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-light); padding: 0.25rem; }
-        
-        .music-playlist { max-height: 220px; overflow-y: auto; padding: 0.5rem; }
-        .music-playlist-title { font-size: 0.75rem; color: var(--text-light); padding: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em; }
-        
-        .music-song {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        
-        .music-song:hover { background: var(--bg-warm); }
-        .music-song.active { background: var(--bg-cream); }
-        
-        .music-song-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            background: var(--gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            flex-shrink: 0;
-        }
-        
-        .music-song-info { flex: 1; min-width: 0; }
-        .music-song-name { font-size: 0.85rem; color: var(--text-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .music-song-singer { font-size: 0.75rem; color: var(--text-light); }
-        
-        .music-song-del {
-            background: none;
+        .atmosphere-menu button {
+            display: block;
+            width: 100%;
+            padding: 0.6rem 1rem;
             border: none;
-            font-size: 1rem;
-            cursor: pointer;
-            color: var(--text-light);
-            opacity: 0;
-            transition: opacity 0.2s;
-            padding: 0.25rem;
-        }
-        
-        .music-song:hover .music-song-del { opacity: 1; }
-        .music-song-del:hover { color: #e74c3c; }
-        
-        .music-add-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            width: calc(100% - 1rem);
-            margin: 0.5rem;
-            padding: 0.75rem;
-            border: 2px dashed var(--bg-cream);
-            border-radius: 10px;
             background: none;
-            color: var(--text-light);
-            font-size: 0.85rem;
             cursor: pointer;
-            transition: all 0.2s;
-            font-family: inherit;
+            font-size: 0.9rem;
+            text-align: left;
+            border-radius: 8px;
         }
         
-        .music-add-btn:hover { border-color: var(--accent); color: var(--accent); }
-        
-        /* Hero */
-        .hero-carousel { height: 100vh; position: relative; overflow: hidden; background: var(--text-dark); }
-        .carousel-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.2s ease; }
-        .carousel-slide.active { opacity: 1; }
-        .carousel-img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .carousel-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(61,50,41,0.3) 0%, rgba(61,50,41,0.65) 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 2rem;
-        }
-        
-        .carousel-badge { background: rgba(255,255,255,0.2); backdrop-filter: blur(8px); padding: 0.5rem 1.5rem; border-radius: 50px; color: white; font-size: 0.85rem; margin-bottom: 1.5rem; border: 1px solid rgba(255,255,255,0.3); }
-        .carousel-title { font-family: 'Noto Serif SC', serif; font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 700; color: white; margin-bottom: 1rem; text-shadow: 0 4px 20px rgba(0,0,0,0.3); }
-        .carousel-subtitle { font-size: clamp(1rem, 2vw, 1.3rem); color: rgba(255,255,255,0.9); max-width: 600px; margin-bottom: 2rem; }
-        .carousel-info { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
-        .carousel-info-item { background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); padding: 0.6rem 1.2rem; border-radius: 12px; color: white; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.2); }
-        
-        .carousel-dots { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); display: flex; gap: 0.6rem; }
-        .carousel-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; transition: all 0.3s; border: none; }
-        .carousel-dot.active { background: white; transform: scale(1.3); }
-        
-        .carousel-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; border: none; background: rgba(255,255,255,0.2); backdrop-filter: blur(8px); color: white; font-size: 1.5rem; border-radius: 50%; cursor: pointer; transition: background 0.3s; display: flex; align-items: center; justify-content: center; }
-        .carousel-arrow:hover { background: rgba(255,255,255,0.3); }
-        
-        .section { padding: 5rem 2rem; max-width: 1400px; margin: 0 auto; }
-        .section-header { text-align: center; margin-bottom: 3rem; }
-        .section-tag { display: inline-block; font-size: 0.75rem; color: var(--accent); letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 0.75rem; }
-        .section-title { font-family: 'Noto Serif SC', serif; font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--text-dark); margin-bottom: 0.75rem; }
-        .section-desc { color: var(--text-light); max-width: 500px; margin: 0 auto; font-size: 0.95rem; }
-        
-        /* Family */
-        .family-section { background: var(--white); }
-        .family-container { max-width: 1100px; margin: 0 auto; }
-        .family-hero { text-align: center; margin-bottom: 3rem; padding: 3rem; background: linear-gradient(145deg, var(--bg-warm) 0%, var(--bg-cream) 100%); border-radius: 30px; position: relative; overflow: hidden; }
-        .family-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: var(--gradient); }
-        .family-hero-title { font-family: 'Noto Serif SC', serif; font-size: 2.5rem; color: var(--text-dark); margin-bottom: 0.5rem; }
-        .family-hero-subtitle { color: var(--text-light); font-size: 1rem; }
-        
-        .family-photo-wall { display: grid; grid-template-columns: 1fr 1.5fr 1fr; gap: 1.5rem; align-items: center; margin-bottom: 3rem; }
-        .family-side-photo { display: flex; flex-direction: column; gap: 1.5rem; }
-        .family-photo-item { background: var(--bg-cream); border-radius: 20px; overflow: hidden; box-shadow: 0 8px 32px var(--shadow); transition: transform 0.3s; }
-        .family-photo-item:hover { transform: translateY(-5px); }
-        .family-photo-img { width: 100%; height: 180px; object-fit: cover; }
-        .family-photo-caption { padding: 1rem; text-align: center; }
-        .family-photo-name { font-family: 'Noto Serif SC', serif; font-size: 1.1rem; color: var(--text-dark); }
-        
-        .family-center { text-align: center; }
-        .family-main-photo { width: 100%; max-width: 350px; aspect-ratio: 1; object-fit: cover; border-radius: 50%; border: 6px solid var(--accent-light); box-shadow: 0 12px 48px var(--shadow-strong); margin-bottom: 1.5rem; }
-        .family-names-row { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
-        .family-name-badge { background: var(--white); padding: 0.5rem 1.5rem; border-radius: 30px; box-shadow: 0 4px 16px var(--shadow); }
-        .family-name-badge .role { font-size: 0.75rem; color: var(--accent); }
-        .family-name-badge .name { font-family: 'Noto Serif SC', serif; font-size: 1.1rem; color: var(--text-dark); }
-        
-        .family-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        .family-card-new { background: var(--white); border-radius: 24px; padding: 2rem; box-shadow: 0 8px 32px var(--shadow); display: flex; align-items: center; gap: 1.5rem; transition: transform 0.3s, box-shadow 0.3s; border: 2px solid transparent; }
-        .family-card-new:hover { transform: translateY(-5px); box-shadow: 0 12px 48px var(--shadow-strong); border-color: var(--accent-light); }
-        .family-card-avatar { width: 100px; height: 100px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; font-size: 3rem; flex-shrink: 0; border: 4px solid var(--white); box-shadow: 0 4px 16px var(--shadow); }
-        .family-card-info { flex: 1; }
-        .family-card-role { font-size: 0.8rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.25rem; }
-        .family-card-name { font-family: 'Noto Serif SC', serif; font-size: 1.4rem; color: var(--text-dark); margin-bottom: 0.5rem; }
-        .family-card-birthday { font-size: 0.9rem; color: var(--text-light); display: flex; align-items: center; gap: 0.5rem; }
-        
-        /* Timeline */
-        .timeline-section { background: var(--bg-cream); }
-        .timeline { position: relative; max-width: 900px; margin: 0 auto; }
-        .timeline::before { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 3px; background: var(--gradient); transform: translateX(-50%); }
-        .timeline-item { position: relative; padding: 2rem 0; display: flex; align-items: flex-start; }
-        .timeline-item:nth-child(odd) { flex-direction: row-reverse; text-align: right; }
-        .timeline-item:nth-child(even) { text-align: left; }
-        .timeline-dot { position: absolute; left: 50%; top: 2.5rem; width: 18px; height: 18px; background: var(--accent); border: 4px solid var(--white); border-radius: 50%; transform: translateX(-50%); box-shadow: 0 2px 12px var(--shadow); z-index: 1; }
-        .timeline-content { width: calc(50% - 3rem); background: var(--white); padding: 1.75rem; border-radius: 20px; box-shadow: 0 4px 24px var(--shadow); }
-        .timeline-date { font-size: 0.8rem; color: var(--accent); font-weight: 500; margin-bottom: 0.5rem; }
-        .timeline-title { font-family: 'Noto Serif SC', serif; font-size: 1.25rem; color: var(--text-dark); margin-bottom: 0.5rem; }
-        .timeline-text { font-size: 0.9rem; color: var(--text-medium); line-height: 1.7; }
-        .timeline-stats { display: flex; gap: 0.75rem; margin-top: 1rem; flex-wrap: wrap; }
-        .timeline-stat { background: var(--bg-warm); padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.8rem; color: var(--primary); }
-        
-        /* Growth */
-        .growth-section { background: var(--white); }
-        .growth-container { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 1000px; margin: 0 auto; }
-        .growth-card { background: var(--bg-warm); border-radius: 20px; padding: 2rem; box-shadow: 0 8px 32px var(--shadow); }
-        .growth-card-title { font-family: 'Noto Serif SC', serif; font-size: 1.2rem; color: var(--text-dark); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
-        .growth-chart { max-height: 250px; }
-        .growth-data { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 2rem; }
-        .growth-data-item { text-align: center; padding: 1rem; background: var(--white); border-radius: 12px; }
-        .growth-data-age { font-size: 0.75rem; color: var(--text-light); margin-bottom: 0.5rem; }
-        .growth-data-value { font-family: 'Noto Serif SC', serif; font-size: 1.3rem; color: var(--primary); font-weight: 600; }
-        
-        /* Honor */
-        .honor-section { background: var(--bg-cream); }
-        .honor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
-        .honor-card { background: linear-gradient(145deg, #fff9f0 0%, var(--white) 100%); border-radius: 20px; padding: 1.5rem; box-shadow: 0 4px 24px var(--shadow); position: relative; overflow: hidden; border: 1px solid rgba(212, 165, 116, 0.2); }
-        .honor-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--gradient); }
-        .honor-badge { width: 64px; height: 64px; background: var(--gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 1rem; }
-        .honor-title { font-family: 'Noto Serif SC', serif; font-size: 1.1rem; color: var(--text-dark); margin-bottom: 0.5rem; }
-        .honor-org { font-size: 0.8rem; color: var(--text-light); margin-bottom: 0.5rem; }
-        .honor-date { font-size: 0.75rem; color: var(--accent); }
-        
-        /* Favorites */
-        .favorites-section { background: var(--white); }
-        .favorites-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        .favorite-card { background: var(--bg-warm); border-radius: 24px; padding: 2rem; text-align: center; box-shadow: 0 8px 32px var(--shadow); transition: transform 0.3s; }
-        .favorite-card:hover { transform: translateY(-5px); }
-        .favorite-avatar { width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 1.5rem; object-fit: cover; border: 4px solid var(--accent-light); }
-        .favorite-name { font-family: 'Noto Serif SC', serif; font-size: 1.3rem; color: var(--text-dark); margin-bottom: 0.5rem; }
-        .favorite-desc { font-size: 0.9rem; color: var(--text-medium); line-height: 1.7; }
-        .favorite-tags { display: flex; gap: 0.5rem; justify-content: center; margin-top: 1rem; flex-wrap: wrap; }
-        .favorite-tag { background: var(--white); padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.8rem; color: var(--primary); }
-        
-        /* Gallery */
-        .gallery-tabs { display: flex; justify-content: center; gap: 0.75rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
-        .gallery-tab { padding: 0.6rem 1.5rem; border: 2px solid var(--bg-cream); background: var(--white); color: var(--text-medium); font-size: 0.9rem; font-family: inherit; border-radius: 30px; cursor: pointer; transition: all 0.3s; }
-        .gallery-tab:hover { border-color: var(--accent); color: var(--accent); }
-        .gallery-tab.active { background: var(--primary); color: var(--white); border-color: var(--primary); }
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.25rem; }
-        .gallery-item { position: relative; aspect-ratio: 4/3; border-radius: 16px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 20px var(--shadow); }
-        .gallery-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-        .gallery-item:hover .gallery-img { transform: scale(1.08); }
-        .gallery-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(61, 50, 41, 0.8) 100%); opacity: 0; transition: opacity 0.3s; display: flex; align-items: flex-end; padding: 1.25rem; }
-        .gallery-item:hover .gallery-overlay { opacity: 1; }
-        .gallery-caption { color: white; }
-        .gallery-caption-date { font-size: 0.75rem; opacity: 0.8; margin-bottom: 0.25rem; }
-        .upload-section { background: var(--bg-warm); border-radius: 24px; padding: 2.5rem; margin-top: 3rem; box-shadow: 0 8px 32px var(--shadow); }
-        .upload-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
-        .upload-title { font-family: 'Noto Serif SC', serif; font-size: 1.3rem; color: var(--text-dark); }
-        .upload-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--gradient); color: white; border: none; border-radius: 30px; font-size: 0.9rem; font-family: inherit; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
-        .upload-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--shadow-strong); }
-        .upload-area { border: 2px dashed var(--bg-cream); border-radius: 16px; padding: 3rem 2rem; text-align: center; transition: border-color 0.3s, background 0.3s; cursor: pointer; }
-        .upload-area:hover, .upload-area.dragover { border-color: var(--accent); background: rgba(212, 165, 116, 0.05); }
-        .upload-icon { font-size: 3rem; margin-bottom: 1rem; }
-        .upload-text { color: var(--text-medium); font-size: 0.95rem; margin-bottom: 0.5rem; }
-        .upload-hint { color: var(--text-light); font-size: 0.8rem; }
-        
-        /* Video */
-        .video-section { background: var(--bg-cream); }
-        .video-tabs { display: flex; justify-content: center; gap: 0.75rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
-        .video-tab { padding: 0.6rem 1.5rem; border: 2px solid var(--white); background: var(--white); color: var(--text-medium); font-size: 0.9rem; font-family: inherit; border-radius: 30px; cursor: pointer; transition: all 0.3s; }
-        .video-tab:hover { border-color: var(--accent); }
-        .video-tab.active { background: var(--primary); color: var(--white); border-color: var(--primary); }
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
-        .video-card { background: var(--white); border-radius: 20px; overflow: hidden; box-shadow: 0 4px 24px var(--shadow); transition: transform 0.3s, box-shadow 0.3s; }
-        .video-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px var(--shadow-strong); }
-        .video-player { width: 100%; aspect-ratio: 16/9; background: var(--text-dark); display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; }
-        .video-player video { width: 100%; height: 100%; object-fit: cover; }
-        .video-thumbnail { width: 100%; height: 100%; object-fit: cover; }
-        .video-play-btn { position: absolute; width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,0.95); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--primary); transition: transform 0.3s; pointer-events: none; }
-        .video-card:hover .video-play-btn { transform: scale(1.1); }
-        .video-info { padding: 1.25rem; }
-        .video-title { font-family: 'Noto Serif SC', serif; font-size: 1.1rem; color: var(--text-dark); margin-bottom: 0.5rem; }
-        .video-meta { display: flex; gap: 1rem; color: var(--text-light); font-size: 0.8rem; }
-        .upload-video-area { border: 2px dashed var(--primary-light); border-radius: 20px; padding: 2.5rem; text-align: center; margin-top: 2rem; background: rgba(255,255,255,0.5); }
-        .upload-video-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 2rem; background: var(--primary); color: white; border: none; border-radius: 30px; font-size: 0.95rem; font-family: inherit; cursor: pointer; transition: all 0.3s; }
-        .upload-video-btn:hover { background: var(--primary-dark); transform: translateY(-2px); }
-        
-        /* Milestones */
-        .milestones-section { background: var(--white); }
-        .milestones-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-        .milestone-card { background: var(--bg-warm); border-radius: 20px; padding: 2rem; box-shadow: 0 8px 32px var(--shadow); transition: transform 0.3s, box-shadow 0.3s; }
-        .milestone-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px var(--shadow-strong); }
-        .milestone-icon { width: 56px; height: 56px; background: var(--gradient); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.25rem; }
-        .milestone-age { font-size: 0.8rem; color: var(--accent); font-weight: 500; margin-bottom: 0.4rem; }
-        .milestone-title { font-family: 'Noto Serif SC', serif; font-size: 1.2rem; color: var(--text-dark); margin-bottom: 0.6rem; }
-        .milestone-desc { font-size: 0.9rem; color: var(--text-medium); line-height: 1.7; }
-        .milestone-img { margin-top: 1.25rem; width: 100%; height: 180px; object-fit: cover; border-radius: 12px; }
-        
-        /* Stats */
-        .stats-section { background: var(--primary); color: var(--white); padding: 3.5rem 2rem; }
-        .stats-grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template: repeat(2, auto) / repeat(4, 1fr); gap: 2rem; text-align: center; }
-        .stat-item { padding: 1rem; }
-        .stat-number { font-family: 'Noto Serif SC', serif; font-size: 2.5rem; font-weight: 700; color: var(--accent-light); margin-bottom: 0.4rem; }
-        .stat-label { font-size: 0.85rem; opacity: 0.85; }
-        
-        /* Lightbox */
-        .lightbox { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.94); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-        .lightbox.open { opacity: 1; pointer-events: all; }
-        .lightbox-img { max-width: 90vw; max-height: 85vh; object-fit: contain; border-radius: 8px; }
-        .lightbox-close { position: absolute; top: 1.5rem; right: 1.5rem; width: 48px; height: 48px; border: none; background: rgba(255, 255, 255, 0.1); color: white; font-size: 1.5rem; border-radius: 50%; cursor: pointer; transition: background 0.3s; }
-        .lightbox-close:hover { background: rgba(255, 255, 255, 0.2); }
-        .lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; border: none; background: rgba(255, 255, 255, 0.1); color: white; font-size: 1.5rem; border-radius: 50%; cursor: pointer; transition: background 0.3s; }
-        .lightbox-nav:hover { background: rgba(255, 255, 255, 0.2); }
-        .lightbox-prev { left: 1.5rem; }
-        .lightbox-next { right: 1.5rem; }
+        .atmosphere-menu button:hover { background: var(--bg-warm); }
         
         /* Footer */
-        .footer { background: var(--text-dark); color: var(--text-light); text-align: center; padding: 2.5rem 2rem; }
-        .footer-title { font-family: 'Noto Serif SC', serif; font-size: 1.2rem; color: var(--accent-light); margin-bottom: 0.5rem; }
-        .footer-text { font-size: 0.85rem; opacity: 0.7; }
-        
-        /* Admin Panel */
-        .admin-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 2rem; }
-        .admin-panel { background: var(--white); border-radius: 24px; width: 100%; max-width: 900px; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
-        .admin-header { padding: 1.5rem 2rem; background: var(--bg-warm); border-bottom: 1px solid var(--bg-cream); display: flex; justify-content: space-between; align-items: center; }
-        .admin-title { font-family: 'Noto Serif SC', serif; font-size: 1.5rem; color: var(--text-dark); }
-        .admin-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-light); padding: 0.5rem; }
-        .admin-tabs { display: flex; gap: 0.5rem; padding: 1rem 2rem; background: var(--bg-cream); overflow-x: auto; }
-        .admin-tab { padding: 0.6rem 1.2rem; border: none; background: var(--white); color: var(--text-medium); font-size: 0.85rem; font-family: inherit; border-radius: 8px; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
-        .admin-tab.active { background: var(--primary); color: var(--white); }
-        .admin-content { padding: 2rem; overflow-y: auto; flex: 1; }
-        .admin-section-title { font-family: 'Noto Serif SC', serif; font-size: 1.2rem; color: var(--text-dark); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--accent-light); }
-        .admin-form-group { margin-bottom: 1.25rem; }
-        .admin-label { display: block; font-size: 0.85rem; color: var(--text-medium); margin-bottom: 0.5rem; font-weight: 500; }
-        .admin-input { width: 100%; padding: 0.75rem 1rem; border: 2px solid var(--bg-cream); border-radius: 10px; font-size: 0.9rem; font-family: inherit; transition: border-color 0.2s; background: var(--white); }
-        .admin-input:focus { outline: none; border-color: var(--accent); }
-        .admin-textarea { width: 100%; padding: 0.75rem 1rem; border: 2px solid var(--bg-cream); border-radius: 10px; font-size: 0.9rem; font-family: inherit; min-height: 100px; resize: vertical; transition: border-color 0.2s; }
-        .admin-textarea:focus { outline: none; border-color: var(--accent); }
-        .admin-btn-primary { background: var(--gradient); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 10px; font-size: 0.9rem; font-family: inherit; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
-        .admin-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 16px var(--shadow-strong); }
-        .admin-btn-danger { background: #e74c3c; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.8rem; font-family: inherit; cursor: pointer; }
-        .admin-btn-secondary { background: var(--bg-cream); color: var(--text-medium); border: none; padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.8rem; font-family: inherit; cursor: pointer; }
-        .admin-item { background: var(--bg-warm); border-radius: 12px; padding: 1rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: flex-start; }
-        .admin-item-info { flex: 1; }
-        .admin-item-title { font-weight: 500; color: var(--text-dark); margin-bottom: 0.25rem; }
-        .admin-item-desc { font-size: 0.8rem; color: var(--text-light); }
-        .admin-item-actions { display: flex; gap: 0.5rem; }
-        .admin-login { background: var(--white); border-radius: 24px; padding: 3rem; width: 100%; max-width: 400px; text-align: center; }
-        .admin-login-title { font-family: 'Noto Serif SC', serif; font-size: 1.5rem; color: var(--text-dark); margin-bottom: 2rem; }
-        .admin-login-form { display: flex; flex-direction: column; gap: 1rem; }
-        .admin-save-indicator { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 0.75rem 1.5rem; border-radius: 30px; font-size: 0.9rem; box-shadow: 0 4px 20px var(--shadow-strong); z-index: 3000; opacity: 0; transition: opacity 0.3s; }
-        .admin-save-indicator.show { opacity: 1; }
-        
-        /* Music Add Modal */
-        .music-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 3000; display: flex; align-items: center; justify-content: center; padding: 2rem; }
-        .music-modal { background: var(--white); border-radius: 20px; padding: 2rem; width: 100%; max-width: 450px; }
-        .music-modal-title { font-family: 'Noto Serif SC', serif; font-size: 1.3rem; color: var(--text-dark); margin-bottom: 1.5rem; }
-        .music-modal-hint { font-size: 0.8rem; color: var(--text-light); margin-bottom: 1rem; background: var(--bg-warm); padding: 0.75rem; border-radius: 8px; }
-        .music-modal-hint a { color: var(--accent); text-decoration: none; }
-        .music-modal-actions { display: flex; gap: 1rem; margin-top: 1.5rem; }
-        .music-modal-actions button { flex: 1; padding: 0.75rem; border-radius: 10px; font-size: 0.9rem; font-family: inherit; cursor: pointer; border: none; }
-        .music-modal-cancel { background: var(--bg-cream); color: var(--text-medium); }
-        .music-modal-confirm { background: var(--gradient); color: white; }
-        
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .carousel-arrow { display: none; }
-            .timeline::before { left: 15px; }
-            .timeline-item, .timeline-item:nth-child(odd) { flex-direction: column; text-align: left; padding-left: 40px; }
-            .timeline-dot { left: 15px; }
-            .timeline-content { width: 100%; }
-            .growth-container { grid-template-columns: 1fr; }
-            .growth-data { grid-template-columns: repeat(2, 1fr); }
-            .stats-grid { grid-template: repeat(4, auto) / repeat(2, 1fr); }
-            .family-photo-wall { grid-template-columns: 1fr; }
-            .family-side-photo { display: none; }
-            .music-player { width: calc(100% - 2rem); left: 1rem; right: 1rem; bottom: 1rem; }
-            .admin-panel { max-height: 100vh; border-radius: 0; }
+        .site-footer {
+            background: var(--primary-dark);
+            color: rgba(255,255,255,0.8);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
         }
+        
+        .site-footer p { font-size: 0.85rem; }
     </style>
 </head>
 <body>
@@ -532,12 +1029,12 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
         
-        // ============ 默认数据 ============
+        // Default Data
         const defaultData = {
             family: [
-                { role: '爸爸', name: '庞尚韬', birthday: '1979年6月30日', avatar: '👨' },
-                { role: '妈妈', name: '陈冬燕', birthday: '1984年11月28日', avatar: '👩' },
-                { role: '小宝贝', name: '庞云谦', birthday: '2018年10月13日（农历九月初五）', avatar: '👶' }
+                { role: '爸爸', name: '庞尚韬', birthday: '1979年6月30日', avatar: '', photos: [] },
+                { role: '妈妈', name: '陈冬燕', birthday: '1984年11月28日', avatar: '', photos: [] },
+                { role: '小宝贝', name: '庞云谦', birthday: '2018年10月13日（农历九月初五）', avatar: '', photos: [] }
             ],
             songs: [
                 { id: 1, name: '小星星', singer: '钢琴曲', url: './music/xiaoxingxing.mp3' },
@@ -579,16 +1076,15 @@
             ]
         };
         
-        const ADMIN_PASSWORD='123456';
-        
-        const DATA_VERSION = 4;
+        const ADMIN_PASSWORD = '123456';
+        const DATA_VERSION = 5;
         
         function loadData() {
             try {
                 const saved = localStorage.getItem('familyAlbumData');
                 if (saved) {
                     const parsed = JSON.parse(saved);
-                    // 确保使用本地音乐
+                    // Ensure local music
                     parsed.songs = [
                         { id: 1, name: '小星星', singer: '钢琴曲', url: './music/xiaoxingxing.mp3' },
                         { id: 2, name: '星星溜进来', singer: '轻快音乐', url: './music/xingxing.mp3' }
@@ -604,524 +1100,137 @@
             localStorage.setItem('familyAlbumData', JSON.stringify(data));
         }
         
-        // ============ 组件 ============
-        
-        function Navigation({ onAdminClick }) {
-            const [active, setActive] = useState('home');
-            
-            const scrollTo = (id) => {
-                setActive(id);
-                const el = document.getElementById(id);
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-            };
-            
-            return (
-                <nav className="nav">
-                    <div className="nav-inner">
-                        <div>
-                            <div className="nav-logo">庞云谦的家庭影集</div>
-                            <div className="nav-subtitle">记录成长的每一个瞬间</div>
-                        </div>
-                        <ul className="nav-links">
-                            <li><button className={`nav-link ${active === 'home' ? 'active' : ''}`} onClick={() => scrollTo('home')}>首页</button></li>
-                            <li><button className={`nav-link ${active === 'family' ? 'active' : ''}`} onClick={() => scrollTo('family')}>家人</button></li>
-                            <li><button className={`nav-link ${active === 'ninghai' ? 'active' : ''}`} onClick={() => scrollTo('ninghai')}>宁海</button></li>
-                            <li><button className={`nav-link ${active === 'timeline' ? 'active' : ''}`} onClick={() => scrollTo('timeline')}>成长</button></li>
-                            <li><button className={`nav-link ${active === 'growth' ? 'active' : ''}`} onClick={() => scrollTo('growth')}>发育</button></li>
-                            <li><button className={`nav-link ${active === 'honor' ? 'active' : ''}`} onClick={() => scrollTo('honor')}>荣誉</button></li>
-                            <li><button className={`nav-link ${active === 'favorites' ? 'active' : ''}`} onClick={() => scrollTo('favorites')}>爱好</button></li>
-                            <li><button className={`nav-link ${active === 'gallery' ? 'active' : ''}`} onClick={() => scrollTo('gallery')}>照片</button></li>
-                            <li><button className={`nav-link ${active === 'videos' ? 'active' : ''}`} onClick={() => scrollTo('videos')}>视频</button></li>
-                            <li><button className="admin-btn" onClick={onAdminClick}>⚙️ 编辑</button></li>
-                        </ul>
-                    </div>
-                </nav>
-            );
-        }
-        
-        // 钢琴曲播放器
-        function MusicPlayer({ songs, onSongsChange }) {
-            const [currentIdx, setCurrentIdx] = useState(0);
-            const [isPlaying, setIsPlaying] = useState(false);
-            const [progress, setProgress] = useState(0);
-            const [currentTime, setCurrentTime] = useState('0:00');
-            const [duration, setDuration] = useState('0:00');
-            const audioRef = useRef(null);
-            
-            const currentSong = songs[currentIdx];
-            
-            const togglePlay = () => {
-                if (!currentSong?.url) return;
-                if (isPlaying) {
-                    audioRef.current?.pause();
-                } else {
-                    audioRef.current?.play().catch(() => {});
-                }
-                setIsPlaying(!isPlaying);
-            };
-            
-            const selectSong = (idx) => {
-                if (isPlaying && audioRef.current) {
-                    audioRef.current.pause();
-                }
-                setCurrentIdx(idx);
-                setIsPlaying(false);
-                setProgress(0);
-                setCurrentTime('0:00');
-            };
-            
-            useEffect(() => {
-                if (audioRef.current && currentSong?.url && isPlaying) {
-                    audioRef.current.play().catch(() => setIsPlaying(false));
-                }
-            }, [currentSong, isPlaying]);
-            
-            const handleTimeUpdate = () => {
-                if (audioRef.current && audioRef.current.duration) {
-                    const p = (audioRef.current.currentTime / audioRef.current.duration) * 100;
-                    setProgress(p || 0);
-                    setCurrentTime(formatTime(audioRef.current.currentTime));
-                }
-            };
-            
-            const handleLoadedMetadata = () => {
-                if (audioRef.current) {
-                    setDuration(formatTime(audioRef.current.duration));
-                }
-            };
-            
-            const handleEnded = () => {
-                setIsPlaying(false);
-                if (songs.length > 1) {
-                    setCurrentIdx((currentIdx + 1) % songs.length);
-                }
-            };
-            
-            const formatTime = (s) => {
-                if (!s || isNaN(s)) return '0:00';
-                return `${Math.floor(s/60)}:${Math.floor(s%60).toString().padStart(2,'0')}`;
-            };
-            
-            const handleProgressClick = (e) => {
-                if (!currentSong?.url || !audioRef.current?.duration) return;
-                const rect = e.currentTarget.getBoundingClientRect();
-                const percent = (e.clientX - rect.left) / rect.width;
-                audioRef.current.currentTime = percent * audioRef.current.duration;
-            };
-            
-            return (
-                <div className="music-player" style={{ width: '320px' }}>
-                    <audio 
-                        ref={audioRef} 
-                        src={currentSong?.url} 
-                        onTimeUpdate={handleTimeUpdate} 
-                        onLoadedMetadata={handleLoadedMetadata} 
-                        onEnded={handleEnded}
-                    />
-                    
-                    <div className="music-main">
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                            <div className="music-album">{isPlaying ? '🎵' : '🎧'}</div>
-                            <div className="music-info">
-                                <div className="music-title">{currentSong?.name || '选择歌曲'}</div>
-                                <div className="music-artist">{currentSong?.singer || ''}</div>
-                            </div>
-                        </div>
-                        
-                        <div className="music-progress">
-                            <div className="music-progress-bar" onClick={handleProgressClick}>
-                                <div className="music-progress-fill" style={{width: `${progress}%`}}></div>
-                            </div>
-                            <div className="music-time">
-                                <span>{currentTime}</span>
-                                <span>{duration}</span>
-                            </div>
-                        </div>
-                        
-                        <div className="music-controls">
-                            <button className="music-ctrl" onClick={() => selectSong((currentIdx - 1 + songs.length) % songs.length)}>⏮</button>
-                            <button className="music-ctrl play" onClick={togglePlay} disabled={!currentSong?.url}>
-                                {isPlaying ? '⏸' : '▶'}
-                            </button>
-                            <button className="music-ctrl" onClick={() => selectSong((currentIdx + 1) % songs.length)}>⏭</button>
-                        </div>
-                    </div>
-                    
-                    <div style={{ padding: '1rem', borderTop: '1px solid var(--bg-cream)', maxHeight: '280px', overflowY: 'auto' }}>
-                        <div style={{ fontSize: '0.75rem', color: 'var(--text-light)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                            点击选择歌曲（共{songs.length}首）
-                        </div>
-                        {songs.map((song, idx) => (
-                            <div
-                                key={song.id || idx}
-                                onClick={() => selectSong(idx)}
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '0.75rem',
-                                    padding: '0.75rem',
-                                    borderRadius: '10px',
-                                    cursor: 'pointer',
-                                    background: idx === currentIdx ? 'var(--bg-cream)' : 'transparent',
-                                    transition: 'background 0.2s'
-                                }}
-                            >
-                                <div style={{
-                                    width: '36px', height: '36px', borderRadius: '8px',
-                                    background: idx === currentIdx && isPlaying ? 'var(--accent)' : 'var(--gradient)',
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    fontSize: '1rem', color: 'white'
-                                }}>
-                                    {idx === currentIdx && isPlaying ? '♪' : idx + 1}
-                                </div>
-                                <div style={{ flex: 1, minWidth: 0 }}>
-                                    <div style={{ fontSize: '0.9rem', color: idx === currentIdx ? 'var(--primary)' : 'var(--text-dark)', fontWeight: idx === currentIdx ? 500 : 400 }}>
-                                        {song.name}
-                                    </div>
-                                    <div style={{ fontSize: '0.75rem', color: 'var(--text-light)' }}>{song.singer}</div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            );
-        }
-        
-        function HeroCarousel({ slides }) {
-            const [current, setCurrent] = useState(0);
-            
-            useEffect(() => {
-                const timer = setInterval(() => setCurrent(c => (c + 1) % slides.length), 5000);
-                return () => clearInterval(timer);
-            }, [slides.length]);
-            
-            return (
-                <section className="hero-carousel" id="home">
-                    {slides.map((photo, idx) => (
-                        <div key={idx} className={`carousel-slide ${idx === current ? 'active' : ''}`}>
-                            <img src={photo.img} alt="" className="carousel-img" />
-                            <div className="carousel-overlay">
-                                <div className="carousel-badge">{photo.badge}</div>
-                                <h1 className="carousel-title">{photo.title}</h1>
-                                <p className="carousel-subtitle">{photo.subtitle}</p>
-                                <div className="carousel-info">
-                                    {photo.info.map((item, i) => <div key={i} className="carousel-info-item">{item}</div>)}
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                    <button className="carousel-arrow carousel-prev" onClick={() => setCurrent(c => (c - 1 + slides.length) % slides.length)}>‹</button>
-                    <button className="carousel-arrow carousel-next" onClick={() => setCurrent(c => (c + 1) % slides.length)}>›</button>
-                    <div className="carousel-dots">
-                        {slides.map((_, idx) => (
-                            <button key={idx} className={`carousel-dot ${idx === current ? 'active' : ''}`} onClick={() => setCurrent(idx)} />
-                        ))}
-                    </div>
-                </section>
-            );
-        }
-        
-        function FamilySection({ family }) {
-            return (
-                <section className="section family-section" id="family">
-                    <div className="family-container">
-                        <div className="family-hero">
-                            <h2 className="family-hero-title">👨‍👩‍👧 我们一家人</h2>
-                            <p className="family-hero-subtitle">相亲相爱，永远在一起</p>
-                        </div>
-                        
-                        <div className="family-cards">
-                            {family.map((m, idx) => (
-                                <div key={idx} className="family-card-new">
-                                    <div className="family-card-avatar">
-                                        {m.avatar && m.avatar.startsWith('data:') ? (
-                                            <img src={m.avatar} alt={m.name} style={{width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover'}} />
-                                        ) : m.avatar}
-                                    </div>
-                                    <div className="family-card-info">
-                                        <div className="family-card-role">{m.role}</div>
-                                        <div className="family-card-name">{m.name}</div>
-                                        <div className="family-card-birthday">🎂 {m.birthday}</div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                        
-                        {/* 爸爸妈妈影集区域 */}
-                        {(family[0]?.photos?.length > 0 || family[1]?.photos?.length > 0) && (
-                            <div style={{marginTop: '3rem'}}>
-                                <h3 style={{fontSize: '1.5rem', color: 'var(--primary)', marginBottom: '1.5rem', textAlign: 'center'}}>
-                                    📸 爸妈影集
-                                </h3>
-                                <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem'}}>
-                                    {family.slice(0, 2).map((m, idx) => (
-                                        <div key={idx} style={{
-                                            background: 'white', borderRadius: '20px', padding: '1.5rem',
-                                            boxShadow: '0 4px 20px var(--shadow)'
-                                        }}>
-                                            <div style={{display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem'}}>
-                                                <div style={{width: '50px', height: '50px', borderRadius: '50%', overflow: 'hidden', background: 'var(--gradient)'}}>
-                                                    {m.avatar && m.avatar.startsWith('data:') ? (
-                                                        <img src={m.avatar} alt={m.name} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
-                                                    ) : (
-                                                        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: '1.5rem'}}>{m.avatar}</div>
-                                                    )}
-                                                </div>
-                                                <div>
-                                                    <div style={{fontWeight: 'bold', color: 'var(--text-dark)'}}>{m.name}</div>
-                                                    <div style={{fontSize: '0.85rem', color: 'var(--text-light)'}}>{m.role}的照片 ({m.photos?.length || 0}张)</div>
-                                                </div>
-                                            </div>
-                                            <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem'}}>
-                                                {(m.photos || []).slice(0, 6).map((photo, pi) => (
-                                                    <div key={pi} style={{
-                                                        aspectRatio: '1', borderRadius: '10px', overflow: 'hidden',
-                                                        background: 'var(--bg-cream)'
-                                                    }}>
-                                                        <img src={photo} alt="" style={{width: '100%', height: '100%', objectFit: 'cover'}} />
-                                                    </div>
-                                                ))}
-                                                {(m.photos || []).length === 0 && (
-                                                    <div style={{gridColumn: '1/-1', textAlign: 'center', padding: '2rem', color: 'var(--text-light)'}}>
-                                                        后台添加照片
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </section>
-            );
-        }
-        
-        // 宁海人文板块
-        function NinghaiSection() {
-            const ninghaiInfo = [
-                {
-                    title: '千年古邑',
-                    icon: '🏯',
-                    desc: '宁海置县于西晋太康元年（280年），距今已有1700多年历史，是浙江省历史文化名城。',
-                    color: '#E8D5B7'
-                },
-                {
-                    title: '海上桃源',
-                    icon: '⛰️',
-                    desc: '宁海依山傍海，拥有天台山余脉与东海之滨的独特地理风貌，自古有"海上桃源"之美誉。',
-                    color: '#B7E8D5'
-                },
-                {
-                    title: '进士之乡',
-                    icon: '📜',
-                    desc: '明清两代，宁海共出进士128人，被誉为"进士之乡"，文脉绵延，耕读传家。',
-                    color: '#B7D5E8'
-                },
-                {
-                    title: '美食天堂',
-                    icon: '🦀',
-                    desc: '宁海小海鲜闻名遐迩，望海茶、岔路麦饼、前童豆腐等特色美食让人回味无穷。',
-                    color: '#E8B7D5'
-                },
-                {
-                    title: '民俗文化',
-                    icon: '🎭',
-                    desc: '"宁海耍牙"是国家级非物质文化遗产，展现了独特的民间艺术魅力。',
-                    color: '#D5E8B7'
-                },
-                {
-                    title: '红色热土',
-                    icon: '🌾',
-                    desc: '1949年宁海解放，在这片土地上留下了许多珍贵的红色记忆与革命故事。',
-                    color: '#E8B7B7'
-                }
-            ];
-            
-            return (
-                <section className="section" id="ninghai" style={{background: 'var(--bg-cream)', padding: '4rem 2rem'}}>
-                    <div style={{maxWidth: '1200px', margin: '0 auto'}}>
-                        <div style={{textAlign: 'center', marginBottom: '3rem'}}>
-                            <h2 style={{fontSize: '2.5rem', color: 'var(--primary)', marginBottom: '1rem'}}>
-                                🏡 云谦的家乡 · 宁海
-                            </h2>
-                            <p style={{color: 'var(--text-light)', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto'}}>
-                                宁海县位于浙江省东部沿海，是云谦出生和成长的地方。这里山清水秀、人文底蕴深厚。
-                            </p>
-                        </div>
-                        
-                        <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem'}}>
-                            {ninghaiInfo.map((item, idx) => (
-                                <div key={idx} style={{
-                                    background: item.color, borderRadius: '20px', padding: '1.5rem',
-                                    transition: 'transform 0.3s', cursor: 'default'
-                                }}
-                                onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'}
-                                onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
-                                    <div style={{fontSize: '2.5rem', marginBottom: '1rem'}}>{item.icon}</div>
-                                    <h3 style={{fontSize: '1.2rem', color: 'var(--text-dark)', marginBottom: '0.75rem'}}>{item.title}</h3>
-                                    <p style={{fontSize: '0.95rem', color: 'var(--text-light)', lineHeight: '1.6'}}>{item.desc}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-            );
-        }
-        
-        // 氛围效果组件 - 流星雨/下雨/下雪
+        // Atmosphere Effect Component
         function AtmosphereEffect({ type }) {
             const canvasRef = useRef(null);
             
             useEffect(() => {
+                if (type === 'none') return;
+                
                 const canvas = canvasRef.current;
                 if (!canvas) return;
+                
                 const ctx = canvas.getContext('2d');
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
                 
                 let particles = [];
-                let animationId;
-                
-                const resize = () => {
-                    canvas.width = window.innerWidth;
-                    canvas.height = window.innerHeight;
-                };
-                window.addEventListener('resize', resize);
-                
-                // 创建粒子
-                const createParticles = () => {
-                    particles = [];
-                    const count = type === 'meteor' ? 50 : type === 'rain' ? 200 : 150;
-                    for (let i = 0; i < count; i++) {
-                        particles.push(createParticle());
-                    }
-                };
                 
                 const createParticle = () => {
                     if (type === 'meteor') {
-                        return {
-                            x: Math.random() * canvas.width,
-                            y: Math.random() * canvas.height * 0.5,
-                            size: Math.random() * 2 + 1,
-                            speedY: Math.random() * 2 + 1,
-                            speedX: Math.random() * 4 + 2,
-                            opacity: Math.random() * 0.8 + 0.2,
-                            tail: Math.random() * 50 + 30
-                        };
+                        return { x: Math.random() * canvas.width, y: -10, size: Math.random() * 2 + 1, speedY: Math.random() * 3 + 2, speedX: Math.random() * 2 + 1, opacity: 1 };
                     } else if (type === 'rain') {
-                        return {
-                            x: Math.random() * canvas.width,
-                            y: Math.random() * canvas.height,
-                            length: Math.random() * 20 + 10,
-                            speed: Math.random() * 10 + 15,
-                            opacity: Math.random() * 0.3 + 0.1
-                        };
+                        return { x: Math.random() * canvas.width, y: -10, length: Math.random() * 20 + 10, speed: Math.random() * 5 + 5, opacity: Math.random() * 0.3 + 0.2 };
                     } else {
-                        return {
-                            x: Math.random() * canvas.width,
-                            y: Math.random() * canvas.height,
-                            size: Math.random() * 4 + 2,
-                            speedY: Math.random() * 1 + 0.5,
-                            speedX: Math.random() * 1 - 0.5,
-                            opacity: Math.random() * 0.6 + 0.4,
-                            wobble: Math.random() * Math.PI * 2
-                        };
+                        return { x: Math.random() * canvas.width, y: -10, size: Math.random() * 4 + 2, speedY: Math.random() * 1 + 0.5, speedX: Math.random() * 0.5 - 0.25, opacity: Math.random() * 0.5 + 0.3, wobble: Math.random() * Math.PI * 2 };
                     }
                 };
+                
+                for (let i = 0; i < 50; i++) {
+                    particles.push(createParticle());
+                }
                 
                 const animate = () => {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     
                     particles.forEach((p, i) => {
                         if (type === 'meteor') {
-                            // 流星
-                            const gradient = ctx.createLinearGradient(p.x, p.y, p.x - p.tail, p.y + p.tail * 0.5);
-                            gradient.addColorStop(0, `rgba(255, 255, 255, ${p.opacity})`);
-                            gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                            ctx.beginPath();
+                            const gradient = ctx.createLinearGradient(p.x, p.y, p.x - p.speedX * 20, p.y + p.speedY * 20);
+                            gradient.addColorStop(0, `rgba(255,255,255,${p.opacity})`);
+                            gradient.addColorStop(1, 'transparent');
                             ctx.strokeStyle = gradient;
                             ctx.lineWidth = p.size;
-                            ctx.beginPath();
                             ctx.moveTo(p.x, p.y);
-                            ctx.lineTo(p.x - p.tail, p.y + p.tail * 0.5);
+                            ctx.lineTo(p.x - p.speedX * 20, p.y + p.speedY * 20);
                             ctx.stroke();
-                            
-                            p.x -= p.speedX;
-                            p.y += p.speedY;
-                            
-                            if (p.y > canvas.height || p.x < 0) {
-                                particles[i] = { ...createParticle(), x: Math.random() * canvas.width + 100, y: -50 };
-                            }
+                            p.x -= p.speedX * 10;
+                            p.y += p.speedY * 10;
                         } else if (type === 'rain') {
-                            // 下雨
-                            ctx.strokeStyle = `rgba(174, 194, 224, ${p.opacity})`;
-                            ctx.lineWidth = 1;
                             ctx.beginPath();
+                            ctx.strokeStyle = `rgba(150,180,255,${p.opacity})`;
+                            ctx.lineWidth = 1;
                             ctx.moveTo(p.x, p.y);
-                            ctx.lineTo(p.x + 1, p.y + p.length);
+                            ctx.lineTo(p.x - 1, p.y + p.length);
                             ctx.stroke();
-                            
                             p.y += p.speed;
-                            p.x += 1;
-                            
-                            if (p.y > canvas.height) {
-                                particles[i] = { ...createParticle(), y: -20 };
-                            }
+                            p.x -= 0.5;
                         } else {
-                            // 下雪
-                            ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
                             ctx.beginPath();
                             ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                            ctx.fillStyle = `rgba(255,255,255,${p.opacity})`;
                             ctx.fill();
-                            
-                            p.wobble += 0.02;
-                            p.x += Math.sin(p.wobble) * 0.5 + p.speedX * 0.2;
+                            p.wobble += 0.05;
+                            p.x += Math.sin(p.wobble) * 0.5;
                             p.y += p.speedY;
-                            
-                            if (p.y > canvas.height) {
-                                particles[i] = { ...createParticle(), y: -10 };
-                            }
+                        }
+                        
+                        if (p.y > canvas.height + 20) {
+                            particles[i] = createParticle();
+                            particles[i].y = -10;
                         }
                     });
                     
-                    animationId = requestAnimationFrame(animate);
+                    requestAnimationFrame(animate);
                 };
                 
-                createParticles();
                 animate();
                 
-                return () => {
-                    window.removeEventListener('resize', resize);
-                    cancelAnimationFrame(animationId);
-                };
+                return () => cancelAnimationFrame(animate);
             }, [type]);
             
+            if (type === 'none') return null;
+            return <canvas ref={canvasRef} className="atmosphere-canvas" />;
+        }
+        
+        // Navigation
+        function Navigation({ activeSection, onSectionChange, onAdminClick }) {
+            const sections = ['首页', '家人', '时间线', '发育', '荣誉', '爱好', '相册', '视频', '音乐'];
+            
             return (
-                <canvas 
-                    ref={canvasRef} 
-                    className="atmosphere-canvas"
-                    style={{ zIndex: 1, pointerEvents: 'none' }}
-                />
+                <nav className="nav">
+                    <div className="nav-inner">
+                        <div>
+                            <div className="nav-logo">庞云谦的家庭影集</div>
+                        </div>
+                        <ul className="nav-links">
+                            {sections.map(s => (
+                                <li key={s}>
+                                    <button className={`nav-link ${activeSection === s ? 'active' : ''}`} onClick={() => onSectionChange(s)}>
+                                        {s}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                        <button className="nav-admin" onClick={onAdminClick}>管理</button>
+                    </div>
+                </nav>
             );
         }
         
-        function Timeline({ items }) {
+        // Hero Carousel
+        function HeroCarousel({ items }) {
+            const [current, setCurrent] = useState(0);
+            
+            useEffect(() => {
+                const timer = setInterval(() => {
+                    setCurrent(prev => (prev + 1) % items.length);
+                }, 5000);
+                return () => clearInterval(timer);
+            }, [items.length]);
+            
             return (
-                <section className="section timeline-section" id="timeline">
-                    <div className="section-header">
-                        <div className="section-tag">Timeline</div>
-                        <h2 className="section-title">成长时间线</h2>
-                    </div>
-                    <div className="timeline">
+                <section className="hero">
+                    <div className="hero-slides">
                         {items.map((item, idx) => (
-                            <div key={idx} className="timeline-item">
-                                <div className="timeline-dot"></div>
-                                <div className="timeline-content">
-                                    <div className="timeline-date">{item.age} · {item.date}</div>
-                                    <h3 className="timeline-title">{item.title}</h3>
-                                    <p className="timeline-text">{item.desc}</p>
-                                    <div className="timeline-stats">
-                                        {item.stats.map((s, i) => <span key={i} className="timeline-stat">{s}</span>)}
+                            <div key={idx} className={`hero-slide ${idx === current ? 'active' : ''}`}>
+                                <img src={item.img} alt={item.title} />
+                                <div className="hero-overlay">
+                                    <span className="hero-badge">{item.badge}</span>
+                                    <h1 className="hero-title">{item.title}</h1>
+                                    <p className="hero-subtitle">{item.subtitle}</p>
+                                    <div className="hero-info">
+                                        {item.info?.map((info, i) => <span key={i}>{info}</span>)}
                                     </div>
                                 </div>
                             </div>
@@ -1131,85 +1240,28 @@
             );
         }
         
-        function GrowthSection({ data }) {
-            const heightRef = useRef(null);
-            const weightRef = useRef(null);
-            
-            useEffect(() => {
-                if (!heightRef.current || !weightRef.current) return;
-                
-                const opts = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: false, grid: { color: 'rgba(139, 115, 85, 0.1)' } }, x: { grid: { display: false } } } };
-                
-                new Chart(heightRef.current, {
-                    type: 'line',
-                    data: { labels: data.labels, datasets: [{ data: data.height, borderColor: '#D4A574', backgroundColor: 'rgba(212, 165, 116, 0.1)', fill: true, tension: 0.4, pointBackgroundColor: '#D4A574', pointRadius: 6 }] },
-                    options: { ...opts, scales: { ...opts.scales, y: { ...opts.scales.y, title: { display: true, text: '身高 (cm)' } } } }
-                });
-                
-                new Chart(weightRef.current, {
-                    type: 'line',
-                    data: { labels: data.labels, datasets: [{ data: data.weight, borderColor: '#8B7355', backgroundColor: 'rgba(139, 115, 85, 0.1)', fill: true, tension: 0.4, pointBackgroundColor: '#8B7355', pointRadius: 6 }] },
-                    options: { ...opts, scales: { ...opts.scales, y: { ...opts.scales.y, title: { display: true, text: '体重 (kg)' } } } }
-                });
-            }, [data]);
-            
+        // Family Section
+        function FamilySection({ family }) {
             return (
-                <section className="section growth-section" id="growth">
-                    <div className="section-header">
-                        <div className="section-tag">Growth</div>
-                        <h2 className="section-title">生长发育记录</h2>
-                    </div>
-                    <div className="growth-container">
-                        <div className="growth-card">
-                            <div className="growth-card-title">📏 身高变化曲线</div>
-                            <div className="growth-chart"><canvas ref={heightRef}></canvas></div>
-                        </div>
-                        <div className="growth-card">
-                            <div className="growth-card-title">⚖️ 体重变化曲线</div>
-                            <div className="growth-chart"><canvas ref={weightRef}></canvas></div>
-                        </div>
-                    </div>
-                </section>
-            );
-        }
-        
-        function HonorSection({ items }) {
-            return (
-                <section className="section honor-section" id="honor">
-                    <div className="section-header">
-                        <div className="section-tag">Honor</div>
-                        <h2 className="section-title">荣誉墙</h2>
-                    </div>
-                    <div className="honor-grid">
-                        {items.map((item, idx) => (
-                            <div key={idx} className="honor-card">
-                                <div className="honor-badge">{item.badge}</div>
-                                <h3 className="honor-title">{item.title}</h3>
-                                <div className="honor-org">{item.org}</div>
-                                <div className="honor-date">{item.date}</div>
-                                <p style={{ marginTop: '0.75rem', fontSize: '0.85rem', color: 'var(--text-medium)' }}>{item.desc}</p>
-                            </div>
-                        ))}
-                    </div>
-                </section>
-            );
-        }
-        
-        function FavoritesSection({ items }) {
-            return (
-                <section className="section favorites-section" id="favorites">
-                    <div className="section-header">
-                        <div className="section-tag">Favorites</div>
-                        <h2 className="section-title">最喜欢的事物</h2>
-                    </div>
-                    <div className="favorites-grid">
-                        {items.map((item, idx) => (
-                            <div key={idx} className="favorite-card">
-                                <img src={item.avatar} alt={item.name} className="favorite-avatar" />
-                                <h3 className="favorite-name">{item.name}</h3>
-                                <p className="favorite-desc">{item.desc}</p>
-                                <div className="favorite-tags">
-                                    {item.tags.map((tag, i) => <span key={i} className="favorite-tag">{tag}</span>)}
+                <section className="section" id="family">
+                    <h2 className="section-title">👨‍👩‍👧 家人</h2>
+                    <div className="family-grid">
+                        {family.map((member, idx) => (
+                            <div key={idx} className="family-card">
+                                <div className="family-avatar">
+                                    {member.avatar ? <img src={member.avatar} alt={member.name} /> : member.role === '爸爸' ? '👨' : member.role === '妈妈' ? '👩' : '👶'}
+                                </div>
+                                <div className="family-info">
+                                    <div className="family-role">{member.role}</div>
+                                    <div className="family-name">{member.name}</div>
+                                    <div className="family-birthday">{member.birthday}</div>
+                                    {member.photos?.length > 0 && (
+                                        <div style={{ marginTop: '0.8rem', display: 'flex', gap: '0.3rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                                            {member.photos.map((photo, i) => (
+                                                <img key={i} src={photo} style={{ width: '50px', height: '50px', borderRadius: '8px', objectFit: 'cover' }} alt="" />
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         ))}
@@ -1218,205 +1270,349 @@
             );
         }
         
-        function Gallery({ gallery }) {
-            const [activeTab, setActiveTab] = useState('全部');
-            const [lightbox, setLightbox] = useState({ open: false, idx: 0 });
-            const [uploadedPhotos, setUploadedPhotos] = useState([]);
-            const [allPhotos, setAllPhotos] = useState([]);
-            const fileInputRef = useRef(null);
+        // Timeline Section
+        function TimelineSection({ timeline }) {
+            return (
+                <section className="section" id="timeline">
+                    <h2 className="section-title">📅 成长时间线</h2>
+                    <div className="timeline">
+                        {timeline.map((item, idx) => (
+                            <div key={idx} className="timeline-item">
+                                <div className="timeline-date">{item.date}</div>
+                                <div className="timeline-age">{item.age}</div>
+                                <h3 className="timeline-title">{item.title}</h3>
+                                <p className="timeline-desc">{item.desc}</p>
+                                {item.stats && (
+                                    <div className="timeline-stats">
+                                        {item.stats.map((stat, i) => <span key={i} className="timeline-stat">{stat}</span>)}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            );
+        }
+        
+        // Growth Chart Section
+        function GrowthSection({ growth }) {
+            const chartRef = useRef(null);
+            const chartInstance = useRef(null);
             
             useEffect(() => {
-                let photos = [];
-                if (activeTab === '全部') {
-                    Object.values(gallery).forEach(cat => photos.push(...cat));
-                    photos = [...photos, ...uploadedPhotos];
-                } else {
-                    photos = gallery[activeTab] || [];
+                if (chartInstance.current) {
+                    chartInstance.current.destroy();
                 }
-                setAllPhotos(photos);
-            }, [activeTab, gallery, uploadedPhotos]);
-            
-            const openLightbox = (idx) => setLightbox({ open: true, idx });
-            const closeLightbox = () => setLightbox({ open: false, idx: 0 });
-            const prevPhoto = () => setLightbox(l => ({ ...l, idx: (l.idx - 1 + allPhotos.length) % allPhotos.length }));
-            const nextPhoto = () => setLightbox(l => ({ ...l, idx: (l.idx + 1) % allPhotos.length }));
-            
-            useEffect(() => {
-                const handleKey = (e) => {
-                    if (!lightbox.open) return;
-                    if (e.key === 'Escape') closeLightbox();
-                    if (e.key === 'ArrowLeft') prevPhoto();
-                    if (e.key === 'ArrowRight') nextPhoto();
-                };
-                window.addEventListener('keydown', handleKey);
-                return () => window.removeEventListener('keydown', handleKey);
-            }, [lightbox.open, allPhotos.length]);
-            
-            const handleFiles = (files) => {
-                files.forEach(file => {
-                    if (file.type.startsWith('image/')) {
-                        const reader = new FileReader();
-                        reader.onload = (evt) => {
-                            setUploadedPhotos(prev => [...prev, {
-                                id: Date.now() + Math.random(),
-                                date: new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long' }),
-                                title: file.name.replace(/\.[^/.]+$/, ''),
-                                img: evt.target.result
-                            }]);
-                        };
-                        reader.readAsDataURL(file);
+                
+                const ctx = chartRef.current.getContext('2d');
+                chartInstance.current = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: growth.labels,
+                        datasets: [
+                            {
+                                label: '身高 (cm)',
+                                data: growth.height,
+                                borderColor: '#D4A574',
+                                backgroundColor: 'rgba(212, 165, 116, 0.2)',
+                                tension: 0.4,
+                                fill: true
+                            },
+                            {
+                                label: '体重 (kg)',
+                                data: growth.weight,
+                                borderColor: '#8B7355',
+                                backgroundColor: 'rgba(139, 115, 85, 0.2)',
+                                tension: 0.4,
+                                fill: true
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top' }
+                        },
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
                     }
                 });
-            };
+                
+                return () => chartInstance.current?.destroy();
+            }, [growth]);
             
-            const handleDrop = (e) => {
-                e.preventDefault();
-                e.currentTarget.classList.remove('dragover');
-                handleFiles(Array.from(e.dataTransfer.files));
-            };
-            
-            const categories = Object.keys(gallery);
+            return (
+                <section className="section" id="growth">
+                    <h2 className="section-title">📏📊 生长发育曲线</h2>
+                    <div className="growth-chart-container">
+                        <canvas ref={chartRef}></canvas>
+                    </div>
+                </section>
+            );
+        }
+        
+        // Honor Section
+        function HonorSection({ honor }) {
+            return (
+                <section className="section" id="honor">
+                    <h2 className="section-title">🏆 荣誉墙</h2>
+                    <div className="honor-grid">
+                        {honor.map((item, idx) => (
+                            <div key={idx} className="honor-card">
+                                <div className="honor-badge">{item.badge}</div>
+                                <div className="honor-content">
+                                    <h4>{item.title}</h4>
+                                    <div className="honor-org">{item.org}</div>
+                                    <div className="honor-date">{item.date}</div>
+                                    <div className="honor-desc">{item.desc}</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            );
+        }
+        
+        // Favorites Section
+        function FavoritesSection({ favorites }) {
+            return (
+                <section className="section" id="favorites">
+                    <h2 className="section-title">❤️ 喜爱的事物</h2>
+                    <div className="favorites-grid">
+                        {favorites.map((item, idx) => (
+                            <div key={idx} className="favorite-card">
+                                <img className="favorite-avatar" src={item.avatar} alt={item.name} />
+                                <div className="favorite-info">
+                                    <div className="favorite-name">{item.name}</div>
+                                    <div className="favorite-desc">{item.desc}</div>
+                                    <div className="favorite-tags">
+                                        {item.tags?.map((tag, i) => <span key={i} className="favorite-tag">{tag}</span>)}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            );
+        }
+        
+        // Gallery Section
+        function GallerySection({ gallery }) {
+            const [activeCategory, setActiveCategory] = useState(Object.keys(gallery)[0] || '');
             
             return (
                 <section className="section" id="gallery">
-                    <div className="section-header">
-                        <div className="section-tag">Gallery</div>
-                        <h2 className="section-title">精彩照片</h2>
-                    </div>
-                    
+                    <h2 className="section-title">📷 相册</h2>
                     <div className="gallery-tabs">
-                        <button className={`gallery-tab ${activeTab === '全部' ? 'active' : ''}`} onClick={() => setActiveTab('全部')}>全部</button>
-                        {categories.filter(k => k !== '全部').map(cat => (
-                            <button key={cat} className={`gallery-tab ${activeTab === cat ? 'active' : ''}`} onClick={() => setActiveTab(cat)}>{cat}</button>
+                        {Object.keys(gallery).map(cat => (
+                            <button key={cat} className={`gallery-tab ${activeCategory === cat ? 'active' : ''}`} onClick={() => setActiveCategory(cat)}>
+                                {cat}
+                            </button>
                         ))}
                     </div>
-                    
                     <div className="gallery-grid">
-                        {allPhotos.map((photo, idx) => (
-                            <div key={photo.id} className="gallery-item" onClick={() => openLightbox(idx)}>
-                                <img src={photo.img} alt={photo.title} className="gallery-img" loading="lazy" />
-                                <div className="gallery-overlay">
-                                    <div className="gallery-caption">
-                                        <div className="gallery-caption-date">{photo.date}</div>
-                                        <div>{photo.title}</div>
-                                    </div>
-                                </div>
+                        {gallery[activeCategory]?.map((item, idx) => (
+                            <div key={idx} className="gallery-item">
+                                <img src={item.img} alt={item.title} />
+                                <span className="gallery-item-title">{item.title}</span>
+                                <span className="gallery-item-date">{item.date}</span>
                             </div>
                         ))}
-                    </div>
-                    
-                    <div className="upload-section">
-                        <div className="upload-header">
-                            <div className="upload-title">上传新照片</div>
-                            <button className="upload-btn" onClick={() => fileInputRef.current?.click()}>
-                                <span>+</span> 添加照片
-                            </button>
-                            <input ref={fileInputRef} type="file" accept="image/*" multiple style={{ display: 'none' }} onChange={(e) => handleFiles(Array.from(e.target.files))} />
-                        </div>
-                        <div className="upload-area" onDrop={handleDrop} onDragOver={(e) => { e.preventDefault(); e.currentTarget.classList.add('dragover'); }} onDragLeave={(e) => e.currentTarget.classList.remove('dragover')} onClick={() => fileInputRef.current?.click()}>
-                            <div className="upload-icon">📷</div>
-                            <div className="upload-text">拖拽照片到这里，或点击选择文件</div>
-                            <div className="upload-hint">支持 JPG、PNG、GIF 等格式</div>
-                        </div>
-                    </div>
-                    
-                    <div className={`lightbox ${lightbox.open ? 'open' : ''}`} onClick={closeLightbox}>
-                        <button className="lightbox-close" onClick={closeLightbox}>×</button>
-                        <button className="lightbox-nav lightbox-prev" onClick={(e) => { e.stopPropagation(); prevPhoto(); }}>‹</button>
-                        <img src={allPhotos[lightbox.idx]?.img} alt={allPhotos[lightbox.idx]?.title} className="lightbox-img" onClick={(e) => e.stopPropagation()} />
-                        <button className="lightbox-nav lightbox-next" onClick={(e) => { e.stopPropagation(); nextPhoto(); }}>›</button>
                     </div>
                 </section>
             );
         }
         
+        // Video Section
         function VideoSection({ videos }) {
-            const [activeTab, setActiveTab] = useState('全部');
-            const [playingVideo, setPlayingVideo] = useState(null);
-            const fileInputRef = useRef(null);
-            const [uploadedVideos, setUploadedVideos] = useState([]);
-            
-            const filteredVideos = activeTab === '全部' ? [...videos, ...uploadedVideos] : videos.filter(v => v.category === activeTab);
-            const categories = [...new Set(videos.map(v => v.category))];
-            
-            const handleVideoUpload = (e) => {
-                Array.from(e.target.files).forEach(file => {
-                    if (file.type.startsWith('video/')) {
-                        const url = URL.createObjectURL(file);
-                        setUploadedVideos(prev => [...prev, {
-                            id: Date.now() + Math.random(),
-                            title: file.name.replace(/\.[^/.]+$/, ''),
-                            date: new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long' }),
-                            category: '日常',
-                            videoUrl: url,
-                            duration: '--:--'
-                        }]);
-                    }
-                });
-            };
-            
             return (
-                <section className="section video-section" id="videos">
-                    <div className="section-header">
-                        <div className="section-tag">Videos</div>
-                        <h2 className="section-title">成长视频</h2>
-                    </div>
-                    
-                    <div className="video-tabs">
-                        <button className={`video-tab ${activeTab === '全部' ? 'active' : ''}`} onClick={() => setActiveTab('全部')}>全部</button>
-                        {categories.map(cat => (
-                            <button key={cat} className={`video-tab ${activeTab === cat ? 'active' : ''}`} onClick={() => setActiveTab(cat)}>{cat}</button>
-                        ))}
-                    </div>
-                    
+                <section className="section" id="videos">
+                    <h2 className="section-title">🎬 视频</h2>
                     <div className="video-grid">
-                        {filteredVideos.map(video => (
-                            <div key={video.id} className="video-card">
-                                <div className="video-player" onClick={() => setPlayingVideo(video)}>
-                                    {playingVideo?.id === video.id && video.videoUrl ? (
-                                        <video src={video.videoUrl} controls autoPlay style={{ width: '100%', height: '100%', objectFit: 'cover' }} onEnded={() => setPlayingVideo(null)} />
-                                    ) : (
-                                        <>
-                                            <img src={video.thumbnail} alt={video.title} className="video-thumbnail" />
-                                            <div className="video-play-btn">▶</div>
-                                        </>
-                                    )}
+                        {videos.map((video, idx) => (
+                            <div key={idx} className="video-card">
+                                <div className="video-thumbnail">
+                                    <img src={video.thumbnail} alt={video.title} />
+                                    <span className="video-duration">{video.duration}</span>
                                 </div>
                                 <div className="video-info">
-                                    <h3 className="video-title">{video.title}</h3>
-                                    <div className="video-meta"><span>{video.date}</span><span>{video.duration}</span></div>
+                                    <div className="video-title">{video.title}</div>
+                                    <div className="video-date">{video.date} · {video.category}</div>
                                 </div>
                             </div>
                         ))}
                     </div>
+                </section>
+            );
+        }
+        
+        // Music Player Component
+        function MusicPlayer({ songs, onSongsChange }) {
+            const [currentIdx, setCurrentIdx] = useState(0);
+            const [isPlaying, setIsPlaying] = useState(false);
+            const [progress, setProgress] = useState(0);
+            const [currentTime, setCurrentTime] = useState(0);
+            const [duration, setDuration] = useState(0);
+            const audioRef = useRef(null);
+            const fileInputRef = useRef(null);
+            
+            const currentSong = songs[currentIdx];
+            
+            const togglePlay = () => {
+                if (audioRef.current) {
+                    if (isPlaying) {
+                        audioRef.current.pause();
+                    } else {
+                        audioRef.current.play();
+                    }
+                    setIsPlaying(!isPlaying);
+                }
+            };
+            
+            const selectSong = (idx) => {
+                setCurrentIdx(idx);
+                setIsPlaying(true);
+            };
+            
+            const handleTimeUpdate = () => {
+                if (audioRef.current) {
+                    setCurrentTime(audioRef.current.currentTime);
+                    setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100 || 0);
+                }
+            };
+            
+            const handleLoadedMetadata = () => {
+                if (audioRef.current) {
+                    setDuration(audioRef.current.duration);
+                }
+            };
+            
+            const handleEnded = () => {
+                if (songs.length > 1) {
+                    setCurrentIdx((currentIdx + 1) % songs.length);
+                } else {
+                    setIsPlaying(false);
+                }
+            };
+            
+            const handleProgressClick = (e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const percent = (e.clientX - rect.left) / rect.width;
+                if (audioRef.current) {
+                    audioRef.current.currentTime = percent * duration;
+                }
+            };
+            
+            const formatTime = (time) => {
+                const mins = Math.floor(time / 60);
+                const secs = Math.floor(time % 60);
+                return `${mins}:${secs.toString().padStart(2, '0')}`;
+            };
+            
+            const handleFileUpload = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const url = URL.createObjectURL(file);
+                    const newSong = {
+                        id: Date.now(),
+                        name: file.name.replace(/\.[^/.]+$/, ''),
+                        singer: '本地音乐',
+                        url: url
+                    };
+                    onSongsChange([...songs, newSong]);
+                    setCurrentIdx(songs.length);
+                }
+            };
+            
+            useEffect(() => {
+                if (audioRef.current && currentSong?.url) {
+                    audioRef.current.src = currentSong.url;
+                    if (isPlaying) {
+                        audioRef.current.play().catch(() => setIsPlaying(false));
+                    }
+                }
+            }, [currentIdx, currentSong]);
+            
+            return (
+                <section className="section" id="music">
+                    <h2 className="section-title">🎵 音乐盒</h2>
+                    <div className="music-player">
+                        <div className="music-header">
+                            <h3>🎶 正在播放</h3>
+                        </div>
+                        
+                        <div className="music-now">
+                            <div className="music-album">
+                                <span className="music-album-icon">🎵</span>
+                            </div>
+                            <div className="music-title">{currentSong?.name}</div>
+                            <div className="music-artist">{currentSong?.singer}</div>
+                        </div>
+                        
+                        <audio ref={audioRef} onTimeUpdate={handleTimeUpdate} onLoadedMetadata={handleLoadedMetadata} onEnded={handleEnded} />
+                        
+                        <div className="music-progress">
+                            <div className="music-progress-bar" onClick={handleProgressClick}>
+                                <div className="music-progress-fill" style={{ width: `${progress}%` }}></div>
+                            </div>
+                            <div className="music-time">
+                                <span>{formatTime(currentTime)}</span>
+                                <span>{formatTime(duration)}</span>
+                            </div>
+                        </div>
+                        
+                        <div className="music-controls">
+                            <button className="music-ctrl" onClick={() => selectSong((currentIdx - 1 + songs.length) % songs.length)}>⏮</button>
+                            <button className="music-ctrl play" onClick={togglePlay}>{isPlaying ? '⏸' : '▶'}</button>
+                            <button className="music-ctrl" onClick={() => selectSong((currentIdx + 1) % songs.length)}>⏭</button>
+                        </div>
+                        
+                        <div className="music-playlist">
+                            <div className="music-playlist-title">点击选择歌曲（共{songs.length}首）</div>
+                            {songs.map((song, idx) => (
+                                <div key={song.id} className={`music-song ${idx === currentIdx ? 'active' : ''}`} onClick={() => selectSong(idx)}>
+                                    <div className="music-song-num">{idx === currentIdx && isPlaying ? '🔊' : idx + 1}</div>
+                                    <div className="music-song-info">
+                                        <div className="music-song-name">{song.name}</div>
+                                        <div className="music-song-singer">{song.singer}</div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        
+                        <div className="music-upload">
+                            <input type="file" ref={fileInputRef} accept="audio/*" onChange={handleFileUpload} />
+                            <button className="music-upload-btn" onClick={() => fileInputRef.current?.click()}>
+                                📂 上传本地音乐
+                            </button>
+                        </div>
+                    </div>
                     
-                    <div className="upload-video-area">
-                        <div className="upload-icon" style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>🎬</div>
-                        <div className="upload-text" style={{ marginBottom: '1rem' }}>上传新视频</div>
-                        <button className="upload-video-btn" onClick={() => fileInputRef.current?.click()}>
-                            <span>+</span> 选择视频文件
-                        </button>
-                        <input ref={fileInputRef} type="file" accept="video/*" multiple style={{ display: 'none' }} onChange={handleVideoUpload} />
+                    <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+                        <a href="./mobile.html" style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '0.9rem' }}>
+                            📱 手机版音乐播放器 →
+                        </a>
                     </div>
                 </section>
             );
         }
         
-        function Milestones({ items }) {
+        // Milestones Section
+        function MilestonesSection({ milestones }) {
             return (
-                <section className="section milestones-section" id="milestones">
-                    <div className="section-header">
-                        <div className="section-tag">Milestones</div>
-                        <h2 className="section-title">成长里程碑</h2>
-                    </div>
+                <section className="section" id="milestones">
+                    <h2 className="section-title">✨ 成长里程碑</h2>
                     <div className="milestones-grid">
-                        {items.map((item, idx) => (
+                        {milestones.map((item, idx) => (
                             <div key={idx} className="milestone-card">
-                                <div className="milestone-icon">{item.icon}</div>
-                                <div className="milestone-age">{item.age}</div>
-                                <h3 className="milestone-title">{item.title}</h3>
-                                <p className="milestone-desc">{item.desc}</p>
-                                <img src={item.img} alt={item.title} className="milestone-img" />
+                                <img src={item.img} alt={item.title} />
+                                <div className="milestone-overlay">
+                                    <div className="milestone-icon">{item.icon}</div>
+                                    <div className="milestone-age">{item.age}</div>
+                                    <div className="milestone-title">{item.title}</div>
+                                    <div className="milestone-desc">{item.desc}</div>
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -1424,434 +1620,380 @@
             );
         }
         
-        function Stats() {
-            return (
-                <section className="stats-section">
-                    <div className="stats-grid">
-                        <div className="stat-item"><div className="stat-number">7</div><div className="stat-label">年成长记录</div></div>
-                        <div className="stat-item"><div className="stat-number">100+</div><div className="stat-label">张照片收藏</div></div>
-                        <div className="stat-item"><div className="stat-number">6</div><div className="stat-label">项荣誉</div></div>
-                        <div className="stat-item"><div className="stat-number">∞</div><div className="stat-label">的爱与祝福</div></div>
-                    </div>
-                </section>
-            );
-        }
-        
-        function Footer() {
-            return (
-                <footer className="footer">
-                    <div className="footer-title">庞云谦的家庭影集</div>
-                    <p className="footer-text">用 ♥ 记录生活 · 2018-2025</p>
-                </footer>
-            );
-        }
-        
-        // ============ Admin Panel ============
-        function AdminPanel({ data, onSave, onClose }) {
-            const [password, setPassword] = useState('');
-            const [loggedIn, setLoggedIn] = useState(false);
-            const [activeTab, setActiveTab] = useState('family');
+        // Admin Panel
+        function AdminPanel({ data, onClose, onSave }) {
             const [editData, setEditData] = useState(data);
-            const [showSave, setShowSave] = useState(false);
+            const [activeTab, setActiveTab] = useState('家人');
+            const [password, setPassword] = useState('');
+            const [isAuthenticated, setIsAuthenticated] = useState(false);
             
-            const handleLogin = () => {
+            const tabs = ['家人', '音乐', '轮播', '时间线', '发育', '荣誉', '爱好', '相册', '视频', '里程碑'];
+            
+            const handleAuth = () => {
                 if (password === ADMIN_PASSWORD) {
-                    setLoggedIn(true);
-                    setEditData(JSON.parse(JSON.stringify(data)));
+                    setIsAuthenticated(true);
                 } else {
                     alert('密码错误');
                 }
             };
             
-            const handleSave = () => {
-                onSave(editData);
-                setShowSave(true);
-                setTimeout(() => setShowSave(false), 2000);
-            };
-            
             const updateField = (section, idx, field, value) => {
-                const newData = JSON.parse(JSON.stringify(editData));
+                const newData = { ...editData };
                 if (idx !== undefined) {
-                    newData[section][idx][field] = value;
-                } else if (section === 'growth') {
-                    newData.growth[field] = value;
+                    newData[section][idx] = { ...newData[section][idx], [field]: value };
+                } else {
+                    newData[section] = { ...editData[section], [field]: value };
                 }
                 setEditData(newData);
             };
             
-            const addItem = (section) => {
-                const newData = JSON.parse(JSON.stringify(editData));
-                if (section === 'family') newData.family.push({ role: '新成员', name: '姓名', birthday: '生日', avatar: '👤' });
-                else if (section === 'timeline') newData.timeline.push({ date: '日期', age: '年龄', title: '标题', desc: '描述', stats: [] });
-                else if (section === 'honor') newData.honor.push({ badge: '🏆', title: '标题', org: '机构', date: '日期', desc: '描述' });
-                else if (section === 'favorites') newData.favorites.push({ name: '名称', avatar: '', desc: '描述', tags: [] });
-                else if (section === 'milestones') newData.milestones.push({ icon: '⭐', age: '年龄', title: '标题', desc: '描述', img: '' });
-                setEditData(newData);
-            };
-            
             const removeItem = (section, idx) => {
-                const newData = JSON.parse(JSON.stringify(editData));
-                newData[section].splice(idx, 1);
+                const newData = { ...editData };
+                newData[section] = newData[section].filter((_, i) => i !== idx);
                 setEditData(newData);
             };
             
-            if (!loggedIn) {
+            const addItem = (section, template) => {
+                const newData = { ...editData };
+                newData[section] = [...newData[section], { ...template, id: Date.now() }];
+                setEditData(newData);
+            };
+            
+            const handleImageUpload = (section, idx, field, e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        updateField(section, idx, field, ev.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            
+            const handleFamilyPhotoUpload = (memberIdx, e) => {
+                const files = Array.from(e.target.files);
+                const newPhotos = [...editData.family[memberIdx].photos || []];
+                files.forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        newPhotos.push(ev.target.result);
+                        setEditData(prev => {
+                            const updated = [...prev.family];
+                            updated[memberIdx] = { ...updated[memberIdx], photos: [...newPhotos] };
+                            return { ...prev, family: updated };
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                });
+            };
+            
+            const handleGalleryUpload = (category, e) => {
+                const files = Array.from(e.target.files);
+                const newItems = [...(editData.gallery[category] || [])];
+                files.forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        newItems.push({
+                            id: Date.now() + Math.random(),
+                            date: new Date().toLocaleDateString('zh-CN'),
+                            title: file.name.replace(/\.[^/.]+$/, ''),
+                            img: ev.target.result
+                        });
+                        setEditData(prev => ({
+                            ...prev,
+                            gallery: { ...prev.gallery, [category]: [...newItems] }
+                        }));
+                    };
+                    reader.readAsDataURL(file);
+                });
+            };
+            
+            const handleSave = () => {
+                onSave(editData);
+                alert('保存成功！');
+            };
+            
+            if (!isAuthenticated) {
                 return (
-                    <div className="admin-overlay" onClick={onClose}>
-                        <div className="admin-login" onClick={e => e.stopPropagation()}>
-                            <h2 className="admin-login-title">🔐 后台管理</h2>
-                            <div className="admin-login-form">
-                                <input
-                                    type="password"
-                                    className="admin-input"
-                                    placeholder="请输入管理密码"
-                                    value={password}
-                                    onChange={e => setPassword(e.target.value)}
-                                    onKeyPress={e => e.key === 'Enter' && handleLogin()}
-                                />
-                                <button className="admin-btn-primary" onClick={handleLogin}>登录</button>
-                                <p style={{ fontSize: '0.8rem', color: 'var(--text-light)' }}>默认密码：123456</p>
-                            </div>
+                    <div className="admin-modal open">
+                        <div className="admin-content" style={{ textAlign: 'center', maxWidth: '400px', margin: '10rem auto' }}>
+                            <h2 style={{ marginBottom: '1.5rem', color: 'var(--primary)' }}>🔐 请输入管理密码</h2>
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
+                                onKeyDown={e => e.key === 'Enter' && handleAuth()}
+                                placeholder="请输入密码"
+                                className="admin-input"
+                                style={{ width: '100%', marginBottom: '1rem', textAlign: 'center' }}
+                            />
+                            <button className="admin-btn admin-btn-save" style={{ width: '100%' }} onClick={handleAuth}>确认</button>
+                            <button className="admin-close" style={{ position: 'absolute', top: '1rem', right: '1rem' }} onClick={onClose}>×</button>
                         </div>
                     </div>
                 );
             }
             
-            const renderTab = () => {
-                switch (activeTab) {
-                    case 'family':
-                        return (
+            return (
+                <div className="admin-modal open">
+                    <div className="admin-content">
+                        <div className="admin-header">
+                            <h2>⚙️ 后台管理</h2>
+                            <button className="admin-close" onClick={onClose}>×</button>
+                        </div>
+                        
+                        <div className="admin-tabs">
+                            {tabs.map(tab => (
+                                <button key={tab} className={`admin-tab ${activeTab === tab ? 'active' : ''}`} onClick={() => setActiveTab(tab)}>
+                                    {tab}
+                                </button>
+                            ))}
+                        </div>
+                        
+                        {activeTab === '家人' && (
                             <div>
-                                <h3 className="admin-section-title">👨‍👩‍👧 家庭成员</h3>
-                                {editData.family.map((m, idx) => (
-                                    <div key={idx} style={{ background: 'var(--bg-warm)', padding: '1rem', borderRadius: '12px', marginBottom: '1rem' }}>
-                                        <div style={{display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem'}}>
-                                            <div style={{width: '60px', height: '60px', borderRadius: '50%', background: 'var(--gradient)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0}}>
-                                                {m.avatar?.startsWith('data:') ? (
-                                                    <img src={m.avatar} alt="" style={{width: '100%', height: '100%', objectFit: 'cover'}} />
-                                                ) : (
-                                                    <span style={{fontSize: '2rem'}}>{m.avatar}</span>
-                                                )}
-                                            </div>
-                                            <div style={{flex: 1}}>
-                                                <div className="admin-form-group">
-                                                    <label className="admin-label">角色</label>
-                                                    <input className="admin-input" value={m.role} onChange={e => updateField('family', idx, 'role', e.target.value)} />
-                                                </div>
-                                            </div>
+                                <h3 className="admin-section-title">👨‍👩‍👧 家人信息</h3>
+                                {editData.family.map((member, idx) => (
+                                    <div key={idx} className="admin-item">
+                                        <div style={{ textAlign: 'center' }}>
+                                            {member.avatar ? <img src={member.avatar} alt="" /> : <div style={{ width: '60px', height: '60px', background: 'var(--bg-cream)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>👤</div>}
+                                            <input type="file" accept="image/*" id={`avatar-${idx}`} style={{ display: 'none' }} onChange={e => handleImageUpload('family', idx, 'avatar', e)} />
+                                            <label htmlFor={`avatar-${idx}`} className="admin-upload-label" style={{ fontSize: '0.7rem', marginTop: '0.3rem', display: 'block' }}>头像</label>
                                         </div>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">姓名</label>
-                                            <input className="admin-input" value={m.name} onChange={e => updateField('family', idx, 'name', e.target.value)} />
+                                        <div className="admin-item-fields">
+                                            <input className="admin-input" value={member.role} onChange={e => updateField('family', idx, 'role', e.target.value)} placeholder="角色" />
+                                            <input className="admin-input" value={member.name} onChange={e => updateField('family', idx, 'name', e.target.value)} placeholder="姓名" />
+                                            <input className="admin-input" value={member.birthday} onChange={e => updateField('family', idx, 'birthday', e.target.value)} placeholder="生日" />
                                         </div>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">生日</label>
-                                            <input className="admin-input" value={m.birthday} onChange={e => updateField('family', idx, 'birthday', e.target.value)} />
-                                        </div>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">头像（点击上传图片）</label>
-                                            <input type="file" accept="image/*" onChange={e => {
-                                                const file = e.target.files[0];
-                                                if (file) {
-                                                    const reader = new FileReader();
-                                                    reader.onload = ev => updateField('family', idx, 'avatar', ev.target.result);
-                                                    reader.readAsDataURL(file);
-                                                }
-                                            }} style={{fontSize: '0.85rem'}} />
-                                        </div>
-                                        {/* 爸爸妈妈可以上传照片影集 */}
-                                        {idx < 2 && (
-                                            <div style={{marginTop: '1rem', paddingTop: '1rem', borderTop: '1px dashed #ddd'}}>
-                                                <div className="admin-form-group">
-                                                    <label className="admin-label">{m.role}的照片影集</label>
-                                                    <input type="file" accept="image/*" multiple onChange={e => {
-                                                        const files = Array.from(e.target.files);
-                                                        const currentPhotos = m.photos || [];
-                                                        const newPhotos = [...currentPhotos];
-                                                        let loaded = 0;
-                                                        files.forEach(file => {
-                                                            const reader = new FileReader();
-                                                            reader.onload = ev => {
-                                                                newPhotos.push(ev.target.result);
-                                                                loaded++;
-                                                                if (loaded === files.length) {
-                                                                    updateField('family', idx, 'photos', newPhotos);
-                                                                }
-                                                            };
-                                                            reader.readAsDataURL(file);
-                                                        });
-                                                    }} style={{fontSize: '0.85rem'}} />
-                                                    <div style={{fontSize: '0.8rem', color: 'var(--text-light)', marginTop: '0.5rem'}}>
-                                                        已上传 {(m.photos || []).length} 张照片
-                                                    </div>
-                                                </div>
-                                                {(m.photos || []).length > 0 && (
-                                                    <div style={{display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.5rem'}}>
-                                                        {(m.photos || []).map((photo, pi) => (
-                                                            <div key={pi} style={{position: 'relative', width: '60px', height: '60px'}}>
-                                                                <img src={photo} alt="" style={{width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px'}} />
-                                                                <button onClick={() => {
-                                                                    const newPhotos = [...(m.photos || [])];
-                                                                    newPhotos.splice(pi, 1);
-                                                                    updateField('family', idx, 'photos', newPhotos);
-                                                                }} style={{position: 'absolute', top: '-5px', right: '-5px', width: '20px', height: '20px', borderRadius: '50%', background: 'red', color: 'white', border: 'none', fontSize: '12px', cursor: 'pointer'}}>×</button>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                )}
-                                            </div>
-                                        )}
-                                        <button className="admin-btn-danger" onClick={() => removeItem('family', idx)}>删除</button>
+                                        <button className="admin-btn admin-btn-danger" onClick={() => removeItem('family', idx)}>删除</button>
                                     </div>
                                 ))}
-                                <button className="admin-btn-secondary" onClick={() => addItem('family')}>+ 添加成员</button>
+                                <button className="admin-btn admin-btn-add" onClick={() => addItem('family', { role: '新成员', name: '姓名', birthday: '生日', avatar: '', photos: [] })}>+ 添加成员</button>
+                                
+                                <h3 className="admin-section-title" style={{ marginTop: '1.5rem' }}>📸 家人照片</h3>
+                                {editData.family.map((member, idx) => (
+                                    <div key={idx} className="admin-section" style={{ marginBottom: '1rem' }}>
+                                        <div style={{ fontWeight: 600, marginBottom: '0.5rem' }}>{member.name}</div>
+                                        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
+                                            {member.photos?.map((photo, i) => (
+                                                <div key={i} style={{ position: 'relative' }}>
+                                                    <img src={photo} alt="" style={{ width: '60px', height: '60px', borderRadius: '8px', objectFit: 'cover' }} />
+                                                    <button onClick={() => {
+                                                        const newPhotos = [...member.photos];
+                                                        newPhotos.splice(i, 1);
+                                                        updateField('family', idx, 'photos', newPhotos);
+                                                    }} style={{ position: 'absolute', top: '-5px', right: '-5px', width: '20px', height: '20px', borderRadius: '50%', background: 'red', color: 'white', border: 'none', cursor: 'pointer', fontSize: '12px' }}>×</button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <input type="file" accept="image/*" multiple id={`photos-${idx}`} style={{ display: 'none' }} onChange={e => handleFamilyPhotoUpload(idx, e)} />
+                                        <label htmlFor={`photos-${idx}`} className="admin-upload-label" style={{ cursor: 'pointer' }}>+ 上传照片</label>
+                                    </div>
+                                ))}
                             </div>
-                        );
-                    
-                    case 'music':
-                        return (
+                        )}
+                        
+                        {activeTab === '音乐' && (
                             <div>
                                 <h3 className="admin-section-title">🎵 音乐列表（{editData.songs.length}首）</h3>
-                                <p style={{ fontSize: '0.85rem', color: 'var(--text-light)', marginBottom: '1rem' }}>
-                                    在这里管理歌曲：修改歌曲信息、删除歌曲、或添加新歌曲
-                                </p>
                                 {editData.songs.map((song, idx) => (
-                                    <div key={idx} style={{ background: 'var(--bg-warm)', padding: '1rem', borderRadius: '12px', marginBottom: '1rem' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                                            <span style={{ background: 'var(--primary)', color: 'white', padding: '0.25rem 0.75rem', borderRadius: '20px', fontSize: '0.8rem' }}>{idx + 1}</span>
-                                            <strong style={{ color: 'var(--text-dark)' }}>{song.name}</strong>
+                                    <div key={song.id} className="admin-item">
+                                        <div className="admin-item-fields">
+                                            <input className="admin-input" value={song.name} onChange={e => updateField('songs', idx, 'name', e.target.value)} placeholder="歌曲名" />
+                                            <input className="admin-input" value={song.singer} onChange={e => updateField('songs', idx, 'singer', e.target.value)} placeholder="歌手" />
+                                            <input className="admin-input" value={song.url} onChange={e => updateField('songs', idx, 'url', e.target.value)} placeholder="音乐链接" />
                                         </div>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">歌曲名称</label>
-                                            <input className="admin-input" value={song.name} onChange={e => updateField('songs', idx, 'name', e.target.value)} />
-                                        </div>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">歌手</label>
-                                            <input className="admin-input" value={song.singer} onChange={e => updateField('songs', idx, 'singer', e.target.value)} />
-                                        </div>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">音频链接</label>
-                                            <input className="admin-input" value={song.url} onChange={e => updateField('songs', idx, 'url', e.target.value)} placeholder="https://..." />
-                                        </div>
-                                        <button className="admin-btn-danger" onClick={() => removeItem('songs', idx)}>删除此歌曲</button>
+                                        <button className="admin-btn admin-btn-danger" onClick={() => removeItem('songs', idx)}>删除</button>
                                     </div>
                                 ))}
-                                <button className="admin-btn-secondary" onClick={() => {
-                                    const newData = JSON.parse(JSON.stringify(editData));
-                                    newData.songs.push({ id: Date.now(), name: '新歌曲', singer: '歌手', url: '' });
-                                    setEditData(newData);
-                                }}>+ 添加歌曲</button>
+                                <button className="admin-btn admin-btn-add" onClick={() => addItem('songs', { id: Date.now(), name: '新歌曲', singer: '歌手', url: '' })}>+ 添加歌曲</button>
                             </div>
-                        );
-                    
-                    case 'carousel':
-                        return (
+                        )}
+                        
+                        {activeTab === '轮播' && (
                             <div>
-                                <h3 className="admin-section-title">🎠 首页轮播图</h3>
+                                <h3 className="admin-section-title">🖼️ 轮播图片</h3>
                                 {editData.carousel.map((item, idx) => (
-                                    <div key={idx} style={{ background: 'var(--bg-warm)', padding: '1rem', borderRadius: '12px', marginBottom: '1rem' }}>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">图片URL</label>
-                                            <input className="admin-input" value={item.img} onChange={e => updateField('carousel', idx, 'img', e.target.value)} />
+                                    <div key={idx} className="admin-item">
+                                        <img src={item.img} alt="" style={{ width: '100px', height: '60px', objectFit: 'cover', borderRadius: '8px' }} />
+                                        <div className="admin-item-fields">
+                                            <input className="admin-input" value={item.badge} onChange={e => updateField('carousel', idx, 'badge', e.target.value)} placeholder="标签" />
+                                            <input className="admin-input" value={item.title} onChange={e => updateField('carousel', idx, 'title', e.target.value)} placeholder="标题" />
+                                            <input className="admin-input" value={item.subtitle} onChange={e => updateField('carousel', idx, 'subtitle', e.target.value)} placeholder="副标题" />
+                                            <input className="admin-input" value={item.img} onChange={e => updateField('carousel', idx, 'img', e.target.value)} placeholder="图片URL" />
                                         </div>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">标签</label>
-                                            <input className="admin-input" value={item.badge} onChange={e => updateField('carousel', idx, 'badge', e.target.value)} />
-                                        </div>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">标题</label>
-                                            <input className="admin-input" value={item.title} onChange={e => updateField('carousel', idx, 'title', e.target.value)} />
-                                        </div>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">副标题</label>
-                                            <input className="admin-input" value={item.subtitle} onChange={e => updateField('carousel', idx, 'subtitle', e.target.value)} />
-                                        </div>
+                                        <button className="admin-btn admin-btn-danger" onClick={() => removeItem('carousel', idx)}>删除</button>
                                     </div>
                                 ))}
+                                <button className="admin-btn admin-btn-add" onClick={() => addItem('carousel', { img: '', badge: '新图片', title: '标题', subtitle: '副标题', info: [] })}>+ 添加轮播</button>
                             </div>
-                        );
-                    
-                    case 'timeline':
-                        return (
+                        )}
+                        
+                        {activeTab === '时间线' && (
                             <div>
                                 <h3 className="admin-section-title">📅 成长时间线</h3>
                                 {editData.timeline.map((item, idx) => (
-                                    <div key={idx} style={{ background: 'var(--bg-warm)', padding: '1rem', borderRadius: '12px', marginBottom: '1rem' }}>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">日期</label>
-                                            <input className="admin-input" value={item.date} onChange={e => updateField('timeline', idx, 'date', e.target.value)} />
+                                    <div key={idx} className="admin-item">
+                                        <div className="admin-item-fields">
+                                            <input className="admin-input" value={item.date} onChange={e => updateField('timeline', idx, 'date', e.target.value)} placeholder="日期" />
+                                            <input className="admin-input" value={item.age} onChange={e => updateField('timeline', idx, 'age', e.target.value)} placeholder="年龄" />
+                                            <input className="admin-input" value={item.title} onChange={e => updateField('timeline', idx, 'title', e.target.value)} placeholder="标题" />
+                                            <input className="admin-input" value={item.desc} onChange={e => updateField('timeline', idx, 'desc', e.target.value)} placeholder="描述" />
                                         </div>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">年龄</label>
-                                            <input className="admin-input" value={item.age} onChange={e => updateField('timeline', idx, 'age', e.target.value)} />
-                                        </div>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">标题</label>
-                                            <input className="admin-input" value={item.title} onChange={e => updateField('timeline', idx, 'title', e.target.value)} />
-                                        </div>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">描述</label>
-                                            <textarea className="admin-textarea" value={item.desc} onChange={e => updateField('timeline', idx, 'desc', e.target.value)} />
-                                        </div>
-                                        <button className="admin-btn-danger" onClick={() => removeItem('timeline', idx)}>删除</button>
+                                        <button className="admin-btn admin-btn-danger" onClick={() => removeItem('timeline', idx)}>删除</button>
                                     </div>
                                 ))}
-                                <button className="admin-btn-secondary" onClick={() => addItem('timeline')}>+ 添加时间点</button>
+                                <button className="admin-btn admin-btn-add" onClick={() => addItem('timeline', { date: '2025年', age: '7岁', title: '新事件', desc: '描述', stats: [] })}>+ 添加事件</button>
                             </div>
-                        );
-                    
-                    case 'growth':
-                        return (
+                        )}
+                        
+                        {activeTab === '发育' && (
                             <div>
-                                <h3 className="admin-section-title">📊 生长发育数据</h3>
-                                <div className="admin-form-group">
-                                    <label className="admin-label">年龄标签（逗号分隔）</label>
-                                    <input className="admin-input" value={editData.growth.labels.join(',')} onChange={e => updateField('growth', null, 'labels', e.target.value.split(','))} />
-                                </div>
-                                <div className="admin-form-group">
-                                    <label className="admin-label">身高数据（cm，逗号分隔）</label>
-                                    <input className="admin-input" value={editData.growth.height.join(',')} onChange={e => updateField('growth', null, 'height', e.target.value.split(',').map(Number))} />
-                                </div>
-                                <div className="admin-form-group">
-                                    <label className="admin-label">体重数据（kg，逗号分隔）</label>
-                                    <input className="admin-input" value={editData.growth.weight.join(',')} onChange={e => updateField('growth', null, 'weight', e.target.value.split(',').map(Number))} />
+                                <h3 className="admin-section-title">📏📊 生长发育数据</h3>
+                                <div className="admin-section">
+                                    <div style={{ marginBottom: '1rem' }}>年龄段标签（用逗号分隔）</div>
+                                    <input className="admin-input" style={{ width: '100%', marginBottom: '1rem' }} value={editData.growth.labels.join(',')} onChange={e => updateField('growth', undefined, 'labels', e.target.value.split(','))} />
+                                    
+                                    <div style={{ marginBottom: '1rem' }}>身高数据（用逗号分隔）</div>
+                                    <input className="admin-input" style={{ width: '100%', marginBottom: '1rem' }} value={editData.growth.height.join(',')} onChange={e => updateField('growth', undefined, 'height', e.target.value.split(',').map(Number))} />
+                                    
+                                    <div>体重数据（用逗号分隔）</div>
+                                    <input className="admin-input" style={{ width: '100%' }} value={editData.growth.weight.join(',')} onChange={e => updateField('growth', undefined, 'weight', e.target.value.split(',').map(Number))} />
                                 </div>
                             </div>
-                        );
-                    
-                    case 'honor':
-                        return (
+                        )}
+                        
+                        {activeTab === '荣誉' && (
                             <div>
                                 <h3 className="admin-section-title">🏆 荣誉墙</h3>
                                 {editData.honor.map((item, idx) => (
-                                    <div key={idx} style={{ background: 'var(--bg-warm)', padding: '1rem', borderRadius: '12px', marginBottom: '1rem' }}>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">图标</label>
-                                            <input className="admin-input" value={item.badge} onChange={e => updateField('honor', idx, 'badge', e.target.value)} />
+                                    <div key={idx} className="admin-item">
+                                        <div style={{ fontSize: '2rem' }}>{item.badge}</div>
+                                        <div className="admin-item-fields">
+                                            <input className="admin-input" value={item.badge} onChange={e => updateField('honor', idx, 'badge', e.target.value)} placeholder="图标" />
+                                            <input className="admin-input" value={item.title} onChange={e => updateField('honor', idx, 'title', e.target.value)} placeholder="荣誉名称" />
+                                            <input className="admin-input" value={item.org} onChange={e => updateField('honor', idx, 'org', e.target.value)} placeholder="组织" />
+                                            <input className="admin-input" value={item.date} onChange={e => updateField('honor', idx, 'date', e.target.value)} placeholder="日期" />
+                                            <input className="admin-input" value={item.desc} onChange={e => updateField('honor', idx, 'desc', e.target.value)} placeholder="描述" />
                                         </div>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">荣誉名称</label>
-                                            <input className="admin-input" value={item.title} onChange={e => updateField('honor', idx, 'title', e.target.value)} />
-                                        </div>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">颁发机构</label>
-                                            <input className="admin-input" value={item.org} onChange={e => updateField('honor', idx, 'org', e.target.value)} />
-                                        </div>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">日期</label>
-                                            <input className="admin-input" value={item.date} onChange={e => updateField('honor', idx, 'date', e.target.value)} />
-                                        </div>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">描述</label>
-                                            <input className="admin-input" value={item.desc} onChange={e => updateField('honor', idx, 'desc', e.target.value)} />
-                                        </div>
-                                        <button className="admin-btn-danger" onClick={() => removeItem('honor', idx)}>删除</button>
+                                        <button className="admin-btn admin-btn-danger" onClick={() => removeItem('honor', idx)}>删除</button>
                                     </div>
                                 ))}
-                                <button className="admin-btn-secondary" onClick={() => addItem('honor')}>+ 添加荣誉</button>
+                                <button className="admin-btn admin-btn-add" onClick={() => addItem('honor', { badge: '🏆', title: '新荣誉', org: '组织', date: '2024年', desc: '描述' })}>+ 添加荣誉</button>
                             </div>
-                        );
-                    
-                    case 'favorites':
-                        return (
+                        )}
+                        
+                        {activeTab === '爱好' && (
                             <div>
-                                <h3 className="admin-section-title">❤️ 爱好/喜欢的事物</h3>
+                                <h3 className="admin-section-title">❤️ 喜爱事物</h3>
                                 {editData.favorites.map((item, idx) => (
-                                    <div key={idx} style={{ background: 'var(--bg-warm)', padding: '1rem', borderRadius: '12px', marginBottom: '1rem' }}>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">名称</label>
-                                            <input className="admin-input" value={item.name} onChange={e => updateField('favorites', idx, 'name', e.target.value)} />
+                                    <div key={idx} className="admin-item">
+                                        <img src={item.avatar} alt="" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px' }} />
+                                        <div className="admin-item-fields">
+                                            <input type="file" accept="image/*" id={`fav-img-${idx}`} style={{ display: 'none' }} onChange={e => handleImageUpload('favorites', idx, 'avatar', e)} />
+                                            <label htmlFor={`fav-img-${idx}`} className="admin-upload-label" style={{ cursor: 'pointer' }}>更换图片</label>
+                                            <input className="admin-input" value={item.name} onChange={e => updateField('favorites', idx, 'name', e.target.value)} placeholder="名称" />
+                                            <input className="admin-input" value={item.desc} onChange={e => updateField('favorites', idx, 'desc', e.target.value)} placeholder="描述" />
                                         </div>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">图片URL</label>
-                                            <input className="admin-input" value={item.avatar} onChange={e => updateField('favorites', idx, 'avatar', e.target.value)} />
-                                        </div>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">描述</label>
-                                            <textarea className="admin-textarea" value={item.desc} onChange={e => updateField('favorites', idx, 'desc', e.target.value)} />
-                                        </div>
-                                        <button className="admin-btn-danger" onClick={() => removeItem('favorites', idx)}>删除</button>
+                                        <button className="admin-btn admin-btn-danger" onClick={() => removeItem('favorites', idx)}>删除</button>
                                     </div>
                                 ))}
-                                <button className="admin-btn-secondary" onClick={() => addItem('favorites')}>+ 添加爱好</button>
+                                <button className="admin-btn admin-btn-add" onClick={() => addItem('favorites', { name: '新事物', avatar: '', desc: '描述', tags: [] })}>+ 添加爱好</button>
                             </div>
-                        );
-                    
-                    case 'milestones':
-                        return (
+                        )}
+                        
+                        {activeTab === '相册' && (
                             <div>
-                                <h3 className="admin-section-title">⭐ 成长里程碑</h3>
-                                {editData.milestones.map((item, idx) => (
-                                    <div key={idx} style={{ background: 'var(--bg-warm)', padding: '1rem', borderRadius: '12px', marginBottom: '1rem' }}>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">图标</label>
-                                            <input className="admin-input" value={item.icon} onChange={e => updateField('milestones', idx, 'icon', e.target.value)} />
+                                <h3 className="admin-section-title">📷 相册管理</h3>
+                                {Object.keys(editData.gallery).map(category => (
+                                    <div key={category} className="admin-section">
+                                        <div style={{ fontWeight: 600, marginBottom: '0.5rem' }}>{category}</div>
+                                        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
+                                            {editData.gallery[category]?.map((item, idx) => (
+                                                <div key={idx} style={{ position: 'relative' }}>
+                                                    <img src={item.img} alt="" style={{ width: '80px', height: '60px', objectFit: 'cover', borderRadius: '8px' }} />
+                                                    <button onClick={() => {
+                                                        const newItems = editData.gallery[category].filter((_, i) => i !== idx);
+                                                        setEditData(prev => ({ ...prev, gallery: { ...prev.gallery, [category]: newItems } }));
+                                                    }} style={{ position: 'absolute', top: '-5px', right: '-5px', width: '20px', height: '20px', borderRadius: '50%', background: 'red', color: 'white', border: 'none', cursor: 'pointer', fontSize: '12px' }}>×</button>
+                                                </div>
+                                            ))}
                                         </div>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">年龄</label>
-                                            <input className="admin-input" value={item.age} onChange={e => updateField('milestones', idx, 'age', e.target.value)} />
-                                        </div>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">标题</label>
-                                            <input className="admin-input" value={item.title} onChange={e => updateField('milestones', idx, 'title', e.target.value)} />
-                                        </div>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">描述</label>
-                                            <input className="admin-input" value={item.desc} onChange={e => updateField('milestones', idx, 'desc', e.target.value)} />
-                                        </div>
-                                        <div className="admin-form-group">
-                                            <label className="admin-label">图片URL</label>
-                                            <input className="admin-input" value={item.img} onChange={e => updateField('milestones', idx, 'img', e.target.value)} />
-                                        </div>
-                                        <button className="admin-btn-danger" onClick={() => removeItem('milestones', idx)}>删除</button>
+                                        <input type="file" accept="image/*" multiple id={`gallery-${category}`} style={{ display: 'none' }} onChange={e => handleGalleryUpload(category, e)} />
+                                        <label htmlFor={`gallery-${category}`} className="admin-upload-label" style={{ cursor: 'pointer' }}>+ 上传照片</label>
                                     </div>
                                 ))}
-                                <button className="admin-btn-secondary" onClick={() => addItem('milestones')}>+ 添加里程碑</button>
+                                <button className="admin-btn admin-btn-add" style={{ marginTop: '1rem' }} onClick={() => {
+                                    const newCat = prompt('请输入新分类名称：');
+                                    if (newCat) {
+                                        setEditData(prev => ({ ...prev, gallery: { ...prev.gallery, [newCat]: [] } }));
+                                    }
+                                }}>+ 添加分类</button>
                             </div>
-                        );
-                    
-                    default:
-                        return null;
-                }
-            };
-            
-            return (
-                <div className="admin-overlay" onClick={onClose}>
-                    <div className="admin-panel" onClick={e => e.stopPropagation()}>
-                        <div className="admin-header">
-                            <h2 className="admin-title">⚙️ 后台管理</h2>
-                            <button className="admin-close" onClick={onClose}>×</button>
-                        </div>
-                        <div className="admin-tabs">
-                            <button className={`admin-tab ${activeTab === 'family' ? 'active' : ''}`} onClick={() => setActiveTab('family')}>家人</button>
-                            <button className={`admin-tab ${activeTab === 'music' ? 'active' : ''}`} onClick={() => setActiveTab('music')}>音乐</button>
-                            <button className={`admin-tab ${activeTab === 'carousel' ? 'active' : ''}`} onClick={() => setActiveTab('carousel')}>轮播</button>
-                            <button className={`admin-tab ${activeTab === 'timeline' ? 'active' : ''}`} onClick={() => setActiveTab('timeline')}>时间线</button>
-                            <button className={`admin-tab ${activeTab === 'growth' ? 'active' : ''}`} onClick={() => setActiveTab('growth')}>发育</button>
-                            <button className={`admin-tab ${activeTab === 'honor' ? 'active' : ''}`} onClick={() => setActiveTab('honor')}>荣誉</button>
-                            <button className={`admin-tab ${activeTab === 'favorites' ? 'active' : ''}`} onClick={() => setActiveTab('favorites')}>爱好</button>
-                            <button className={`admin-tab ${activeTab === 'milestones' ? 'active' : ''}`} onClick={() => setActiveTab('milestones')}>里程碑</button>
-                        </div>
-                        <div className="admin-content">
-                            {renderTab()}
-                            <button className="admin-btn-primary" onClick={handleSave} style={{ marginTop: '2rem', width: '100%' }}>💾 保存更改</button>
+                        )}
+                        
+                        {activeTab === '视频' && (
+                            <div>
+                                <h3 className="admin-section-title">🎬 视频管理</h3>
+                                {editData.videos.map((item, idx) => (
+                                    <div key={idx} className="admin-item">
+                                        <img src={item.thumbnail} alt="" style={{ width: '80px', height: '45px', objectFit: 'cover', borderRadius: '8px' }} />
+                                        <div className="admin-item-fields">
+                                            <input className="admin-input" value={item.title} onChange={e => updateField('videos', idx, 'title', e.target.value)} placeholder="标题" />
+                                            <input className="admin-input" value={item.date} onChange={e => updateField('videos', idx, 'date', e.target.value)} placeholder="日期" />
+                                            <input className="admin-input" value={item.category} onChange={e => updateField('videos', idx, 'category', e.target.value)} placeholder="分类" />
+                                            <input className="admin-input" value={item.duration} onChange={e => updateField('videos', idx, 'duration', e.target.value)} placeholder="时长" />
+                                            <input className="admin-input" value={item.thumbnail} onChange={e => updateField('videos', idx, 'thumbnail', e.target.value)} placeholder="封面URL" />
+                                        </div>
+                                        <button className="admin-btn admin-btn-danger" onClick={() => removeItem('videos', idx)}>删除</button>
+                                    </div>
+                                ))}
+                                <button className="admin-btn admin-btn-add" onClick={() => addItem('videos', { id: Date.now(), title: '新视频', date: '2024年', category: '日常', thumbnail: '', duration: '0:00' })}>+ 添加视频</button>
+                            </div>
+                        )}
+                        
+                        {activeTab === '里程碑' && (
+                            <div>
+                                <h3 className="admin-section-title">✨ 成长里程碑</h3>
+                                {editData.milestones.map((item, idx) => (
+                                    <div key={idx} className="admin-item">
+                                        <img src={item.img} alt="" style={{ width: '80px', height: '60px', objectFit: 'cover', borderRadius: '8px' }} />
+                                        <div className="admin-item-fields">
+                                            <input className="admin-input" value={item.icon} onChange={e => updateField('milestones', idx, 'icon', e.target.value)} placeholder="图标" />
+                                            <input className="admin-input" value={item.age} onChange={e => updateField('milestones', idx, 'age', e.target.value)} placeholder="年龄" />
+                                            <input className="admin-input" value={item.title} onChange={e => updateField('milestones', idx, 'title', e.target.value)} placeholder="标题" />
+                                            <input className="admin-input" value={item.desc} onChange={e => updateField('milestones', idx, 'desc', e.target.value)} placeholder='描述' />
+                                            <input className="admin-input" value={item.img} onChange={e => updateField('milestones', idx, 'img', e.target.value)} placeholder="图片URL" />
+                                        </div>
+                                        <button className="admin-btn admin-btn-danger" onClick={() => removeItem('milestones', idx)}>删除</button>
+                                    </div>
+                                ))}
+                                <button className="admin-btn admin-btn-add" onClick={() => addItem('milestones', { icon: '⭐', age: '年龄', title: '标题', desc: '描述', img: '' })}>+ 添加里程碑</button>
+                            </div>
+                        )}
+                        
+                        <div style={{ marginTop: '2rem', textAlign: 'center' }}>
+                            <button className="admin-btn admin-btn-save" style={{ padding: '1rem 3rem', fontSize: '1rem' }} onClick={handleSave}>
+                                保存所有更改
+                            </button>
                         </div>
                     </div>
-                    <div className={`admin-save-indicator ${showSave ? 'show' : ''}`}>✓ 保存成功</div>
                 </div>
             );
         }
         
-        // App
+        // Main App
         function App() {
             const [data, setData] = useState(loadData);
+            const [activeSection, setActiveSection] = useState('首页');
             const [showAdmin, setShowAdmin] = useState(false);
             const [atmosphere, setAtmosphere] = useState('none');
-            const [showAtmoControl, setShowAtmoControl] = useState(false);
+            const [showAtmoMenu, setShowAtmoMenu] = useState(false);
             
             const handleSave = (newData) => {
                 setData(newData);
                 saveData(newData);
+                setShowAdmin(false);
             };
             
             const handleSongsChange = (songs) => {
@@ -1862,77 +2004,52 @@
             
             return (
                 <div>
-                    <Navigation onAdminClick={() => setShowAdmin(true)} />
-                    <HeroCarousel slides={data.carousel} />
-                    <FamilySection family={data.family} />
-                    <NinghaiSection />
-                    <Timeline items={data.timeline} />
-                    <GrowthSection data={data.growth} />
-                    <HonorSection items={data.honor} />
-                    <FavoritesSection items={data.favorites} />
-                    <Gallery gallery={data.gallery} />
-                    <VideoSection videos={data.videos} />
-                    <Milestones items={data.milestones} />
-                    <Stats />
-                    <Footer />
-                    <MusicPlayer songs={data.songs} onSongsChange={handleSongsChange} />
-                    {showAdmin && <AdminPanel data={data} onSave={handleSave} onClose={() => setShowAdmin(false)} />}
+                    <AtmosphereEffect type={atmosphere} />
                     
-                    {/* 氛围效果 */}
-                    {atmosphere !== 'none' && <AtmosphereEffect type={atmosphere} />}
+                    <Navigation activeSection={activeSection} onSectionChange={setActiveSection} onAdminClick={() => setShowAdmin(true)} />
                     
-                    {/* 氛围切换控制器 */}
-                    <div style={{
-                        position: 'fixed', top: '50%', right: '20px', transform: 'translateY(-50%)',
-                        zIndex: 999, display: 'flex', flexDirection: 'column', gap: '10px'
-                    }}>
-                        {!showAtmoControl ? (
-                            <button onClick={() => setShowAtmoControl(true)} style={{
-                                width: '50px', height: '50px', borderRadius: '50%', border: 'none',
-                                background: 'linear-gradient(135deg, #667eea, #764ba2)',
-                                color: 'white', fontSize: '1.5rem', cursor: 'pointer',
-                                boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)'
-                            }}>
-                                ✨
-                            </button>
-                        ) : (
-                            <div style={{
-                                background: 'white', borderRadius: '15px', padding: '10px',
-                                boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
-                            }}>
-                                <div style={{display: 'flex', flexDirection: 'column', gap: '8px'}}>
-                                    <button onClick={() => { setAtmosphere('none'); setShowAtmoControl(false); }} style={{
-                                        width: '40px', height: '40px', borderRadius: '50%', border: 'none',
-                                        background: atmosphere === 'none' ? '#667eea' : '#f0f0f0',
-                                        color: atmosphere === 'none' ? 'white' : '#666',
-                                        fontSize: '1rem', cursor: 'pointer'
-                                    }}>关</button>
-                                    <button onClick={() => setAtmosphere('meteor')} style={{
-                                        width: '40px', height: '40px', borderRadius: '50%', border: 'none',
-                                        background: atmosphere === 'meteor' ? '#667eea' : '#f0f0f0',
-                                        color: atmosphere === 'meteor' ? 'white' : '#666',
-                                        fontSize: '1rem', cursor: 'pointer'
-                                    }}>🌠</button>
-                                    <button onClick={() => setAtmosphere('rain')} style={{
-                                        width: '40px', height: '40px', borderRadius: '50%', border: 'none',
-                                        background: atmosphere === 'rain' ? '#667eea' : '#f0f0f0',
-                                        color: atmosphere === 'rain' ? 'white' : '#666',
-                                        fontSize: '1rem', cursor: 'pointer'
-                                    }}>🌧️</button>
-                                    <button onClick={() => setAtmosphere('snow')} style={{
-                                        width: '40px', height: '40px', borderRadius: '50%', border: 'none',
-                                        background: atmosphere === 'snow' ? '#667eea' : '#f0f0f0',
-                                        color: atmosphere === 'snow' ? 'white' : '#666',
-                                        fontSize: '1rem', cursor: 'pointer'
-                                    }}>❄️</button>
-                                    <button onClick={() => setShowAtmoControl(false)} style={{
-                                        width: '40px', height: '40px', borderRadius: '50%', border: 'none',
-                                        background: '#f0f0f0', color: '#666', fontSize: '1rem', cursor: 'pointer'
-                                    }}>×</button>
-                                </div>
-                            </div>
+                    {activeSection === '首页' && <HeroCarousel items={data.carousel} />}
+                    
+                    <main className="main">
+                        {activeSection === '首页' && (
+                            <>
+                                <FamilySection family={data.family} />
+                                <TimelineSection timeline={data.timeline} />
+                                <GrowthSection growth={data.growth} />
+                                <HonorSection honor={data.honor} />
+                                <FavoritesSection favorites={data.favorites} />
+                                <MilestonesSection milestones={data.milestones} />
+                                <GallerySection gallery={data.gallery} />
+                                <VideoSection videos={data.videos} />
+                                <MusicPlayer songs={data.songs} onSongsChange={handleSongsChange} />
+                            </>
                         )}
+                        {activeSection === '家人' && <FamilySection family={data.family} />}
+                        {activeSection === '时间线' && <TimelineSection timeline={data.timeline} />}
+                        {activeSection === '发育' && <GrowthSection growth={data.growth} />}
+                        {activeSection === '荣誉' && <HonorSection honor={data.honor} />}
+                        {activeSection === '爱好' && <FavoritesSection favorites={data.favorites} />}
+                        {activeSection === '相册' && <GallerySection gallery={data.gallery} />}
+                        {activeSection === '视频' && <VideoSection videos={data.videos} />}
+                        {activeSection === '音乐' && <MusicPlayer songs={data.songs} onSongsChange={handleSongsChange} />}
+                    </main>
+                    
+                    <footer className="site-footer">
+                        <p>用爱记录生活，用心收藏回忆 💝</p>
+                        <p style={{ marginTop: '0.5rem', fontSize: '0.8rem', opacity: 0.7 }}>庞云谦的家庭影集</p>
+                    </footer>
+                    
+                    <a href="./mobile.html" className="mobile-music-link">🎵 手机音乐</a>
+                    
+                    <button className="atmosphere-toggle" onClick={() => setShowAtmoMenu(!showAtmoMenu)}>✨</button>
+                    <div className={`atmosphere-menu ${showAtmoMenu ? 'open' : ''}`}>
+                        <button onClick={() => { setAtmosphere('none'); setShowAtmoMenu(false); }}>关</button>
+                        <button onClick={() => { setAtmosphere('meteor'); setShowAtmoMenu(false); }}>🌠 流星雨</button>
+                        <button onClick={() => { setAtmosphere('rain'); setShowAtmoMenu(false); }}>🌧️ 下雨</button>
+                        <button onClick={() => { setAtmosphere('snow'); setShowAtmoMenu(false); }}>❄️ 下雪</button>
                     </div>
+                    
+                    {showAdmin && <AdminPanel data={data} onClose={() => setShowAdmin(false)} onSave={handleSave} />}
                 </div>
             );
         }
