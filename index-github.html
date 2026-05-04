@@ -1,0 +1,2231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>庞云谦的家庭影集 - 记录成长的每一天</title>
+    <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap');
+        
+        :root {
+            --primary: #8B7355;
+            --primary-light: #A69076;
+            --primary-dark: #6B5744;
+            --accent: #D4A574;
+            --accent-light: #E8C9A8;
+            --bg-warm: #FDF8F3;
+            --bg-cream: #F5EDE4;
+            --text-dark: #3D3229;
+            --text-medium: #6B5D4D;
+            --text-light: #9A8A78;
+            --white: #FFFFFF;
+            --shadow: rgba(139, 115, 85, 0.12);
+            --shadow-strong: rgba(139, 115, 85, 0.25);
+            --gradient: linear-gradient(135deg, var(--accent-light), var(--primary-light));
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--bg-warm);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(253, 248, 243, 0.95);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+            padding: 0 2rem;
+            border-bottom: 1px solid rgba(139, 115, 85, 0.1);
+        }
+        
+        .nav-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 72px;
+        }
+        
+        .nav-logo {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 0.05em;
+        }
+        
+        .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+        
+        .nav-link {
+            color: var(--text-medium);
+            font-weight: 500;
+            font-size: 0.85rem;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: color 0.3s;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        
+        .nav-link:hover, .nav-link.active { color: var(--primary); }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        
+        .nav-admin {
+            background: var(--gradient);
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .nav-admin:hover { transform: translateY(-2px); box-shadow: 0 4px 12px var(--shadow-strong); }
+        
+        /* Main Content */
+        .main { margin-top: 72px; }
+        
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 70vh;
+            min-height: 500px;
+            overflow: hidden;
+        }
+        
+        .hero-slides {
+            position: relative;
+            height: 100%;
+            background: var(--bg-cream);
+        }
+        
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        
+        .hero-slide.active { opacity: 1; }
+        
+        .hero-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(61, 50, 41, 0.1), rgba(61, 50, 41, 0.5));
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 4rem;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            width: fit-content;
+        }
+        
+        .hero-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-info {
+            display: flex;
+            gap: 1.5rem;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+        }
+        
+        /* Mobile Music Link */
+        .mobile-music-link {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--gradient);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            z-index: 99;
+            box-shadow: 0 4px 15px var(--shadow-strong);
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-music-link { display: block; }
+            .nav-links { gap: 0.8rem; }
+            .nav-link { font-size: 0.75rem; }
+            .hero-title { font-size: 2rem; }
+            .hero-overlay { padding: 2rem; }
+        }
+        
+        /* Sections */
+        .section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
+            margin: 0.8rem auto 0;
+            border-radius: 2px;
+        }
+        
+        /* Family Section */
+        .family-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 0 1rem;
+        }
+        
+        .family-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .family-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px var(--shadow-strong);
+        }
+        
+        .family-avatar {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            background: var(--bg-cream);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+        
+        .family-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .family-info {
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .family-role {
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+        
+        .family-name {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .family-birthday {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        /* Photo Gallery */
+        .gallery-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .gallery-tab {
+            padding: 0.6rem 1.5rem;
+            border-radius: 20px;
+            background: var(--bg-cream);
+            color: var(--text-medium);
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+        }
+        
+        .gallery-tab.active, .gallery-tab:hover {
+            background: var(--gradient);
+            color: white;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .gallery-item {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            background: var(--bg-cream);
+            cursor: pointer;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .gallery-item:hover img { transform: scale(1.05); }
+        
+        .gallery-item-date {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            color: white;
+            font-size: 0.8rem;
+        }
+        
+        .gallery-item-title {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(255,255,255,0.95);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            color: var(--text-dark);
+        }
+        
+        /* Videos */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .video-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+        
+        .video-thumbnail {
+            position: relative;
+            aspect-ratio: 16/9;
+            background: var(--bg-cream);
+        }
+        
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .video-duration {
+            position: absolute;
+            bottom: 0.5rem;
+            right: 0.5rem;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+        
+        .video-info { padding: 1rem; }
+        .video-title { font-weight: 600; margin-bottom: 0.3rem; }
+        .video-date { color: var(--text-light); font-size: 0.85rem; }
+        
+        /* Growth Chart */
+        .growth-chart-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 30px var(--shadow);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Honor Wall */
+        .honor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .honor-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px var(--shadow);
+            display: flex;
+            gap: 1rem;
+            transition: transform 0.3s;
+        }
+        
+        .honor-card:hover { transform: translateY(-4px); }
+        
+        .honor-badge {
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+        
+        .honor-content h4 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .honor-org { color: var(--accent); font-size: 0.85rem; margin-bottom: 0.3rem; }
+        .honor-date { color: var(--text-light); font-size: 0.8rem; }
+        .honor-desc { color: var(--text-medium); font-size: 0.9rem; margin-top: 0.5rem; }
+        
+        /* Favorites */
+        .favorites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .favorite-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px var(--shadow);
+            transition: transform 0.3s;
+        }
+        
+        .favorite-card:hover { transform: translateY(-4px); }
+        
+        .favorite-avatar {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        
+        .favorite-info { padding: 1rem; text-align: center; }
+        .favorite-name { font-weight: 600; margin-bottom: 0.3rem; }
+        .favorite-desc { color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem; }
+        .favorite-tags { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
+        .favorite-tag {
+            background: var(--bg-cream);
+            color: var(--text-medium);
+            padding: 0.2rem 0.6rem;
+            border-radius: 10px;
+            font-size: 0.7rem;
+        }
+        
+        /* Timeline */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-left: 2rem;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--accent-light);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+            padding-left: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.4rem;
+            top: 0.3rem;
+            width: 14px;
+            height: 14px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 3px solid var(--bg-warm);
+        }
+        
+        .timeline-date { color: var(--accent); font-weight: 600; font-size: 0.9rem; margin-bottom: 0.3rem; }
+        .timeline-age { color: var(--text-light); font-size: 0.8rem; }
+        .timeline-title { font-family: 'Noto Serif SC', serif; font-size: 1.3rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .timeline-desc { color: var(--text-medium); }
+        .timeline-stats { display: flex; gap: 1rem; margin-top: 0.5rem; flex-wrap: wrap; }
+        .timeline-stat {
+            background: var(--bg-cream);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: var(--text-medium);
+        }
+        
+        /* Milestones */
+        .milestones-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .milestone-card {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            background: var(--bg-cream);
+        }
+        
+        .milestone-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .milestone-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+        }
+        
+        .milestone-icon { font-size: 2rem; margin-bottom: 0.3rem; }
+        .milestone-age { font-size: 0.8rem; opacity: 0.8; }
+        .milestone-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.3rem; }
+        .milestone-desc { font-size: 0.85rem; opacity: 0.9; }
+        
+        /* Music Player */
+        .music-player {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 30px var(--shadow);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .music-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .music-header h3 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+        
+        .music-now {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .music-album {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 1rem;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px var(--shadow);
+            background: var(--bg-cream);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .music-album img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .music-album-icon { font-size: 4rem; }
+        
+        .music-title { font-weight: 600; font-size: 1.1rem; margin-bottom: 0.2rem; }
+        .music-artist { color: var(--text-light); font-size: 0.9rem; }
+        
+        .music-progress {
+            margin-bottom: 1rem;
+        }
+        
+        .music-progress-bar {
+            height: 6px;
+            background: var(--bg-cream);
+            border-radius: 3px;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .music-progress-fill {
+            height: 100%;
+            background: var(--gradient);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.1s;
+        }
+        
+        .music-time {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 0.3rem;
+        }
+        
+        .music-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        
+        .music-ctrl {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-medium);
+            transition: color 0.2s, transform 0.2s;
+            padding: 0.5rem;
+        }
+        
+        .music-ctrl:hover { color: var(--primary); transform: scale(1.1); }
+        
+        .music-ctrl.play {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .music-playlist {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 1.5rem;
+            border-top: 1px solid var(--bg-cream);
+            padding-top: 1rem;
+        }
+        
+        .music-playlist-title {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .music-song {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.6rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .music-song:hover { background: var(--bg-warm); }
+        .music-song.active { background: var(--bg-cream); }
+        
+        .music-song-num {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .music-song.active .music-song-num { color: var(--accent); }
+        
+        .music-song-info { flex: 1; }
+        .music-song-name { font-size: 0.9rem; font-weight: 500; }
+        .music-song-singer { font-size: 0.75rem; color: var(--text-light); }
+        
+        .music-upload {
+            margin-top: 1rem;
+            text-align: center;
+        }
+        
+        .music-upload-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: var(--bg-cream);
+            border: none;
+            border-radius: 20px;
+            color: var(--text-medium);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .music-upload-btn:hover { background: var(--accent-light); }
+        
+        /* Admin Modal */
+        .admin-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .admin-modal.open { display: flex; }
+        
+        .admin-content {
+            background: var(--bg-warm);
+            width: 100%;
+            max-width: 900px;
+            margin: 2rem auto;
+            border-radius: 20px;
+            padding: 2rem;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--bg-cream);
+        }
+        
+        .admin-header h2 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .admin-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+        
+        .admin-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .admin-tab {
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            background: var(--bg-cream);
+            color: var(--text-medium);
+            font-size: 0.85rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        
+        .admin-tab.active, .admin-tab:hover {
+            background: var(--gradient);
+            color: white;
+        }
+        
+        .admin-section {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .admin-section-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .admin-item {
+            display: flex;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            border-radius: 10px;
+            background: var(--bg-warm);
+            margin-bottom: 0.8rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .admin-item img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: var(--bg-cream);
+        }
+        
+        .admin-item-fields { flex: 1; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        
+        .admin-input {
+            padding: 0.5rem 0.8rem;
+            border: 1px solid var(--bg-cream);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-family: inherit;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .admin-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .admin-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: none;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .admin-btn-save {
+            background: var(--gradient);
+            color: white;
+        }
+        
+        .admin-btn-save:hover { opacity: 0.9; }
+        
+        .admin-btn-danger {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .admin-btn-danger:hover { background: #ff5252; }
+        
+        .admin-btn-add {
+            background: var(--accent);
+            color: white;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+        
+        .admin-upload-preview {
+            max-width: 100px;
+            max-height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        .admin-image-upload {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .admin-image-upload input[type="file"] {
+            display: none;
+        }
+        
+        .admin-upload-label {
+            padding: 0.5rem 1rem;
+            background: var(--bg-cream);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            color: var(--text-medium);
+        }
+        
+        .admin-upload-label:hover { background: var(--accent-light); }
+        
+        /* Footer */
+        .footer {
+            background: var(--primary-dark);
+            color: rgba(255,255,255,0.8);
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer p { font-size: 0.9rem; }
+        .footer-heart { color: var(--accent); }
+        
+        /* Atmosphere Effects */
+        .atmosphere-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .atmosphere-toggle {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            z-index: 99;
+            background: var(--gradient);
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px var(--shadow-strong);
+            transition: transform 0.2s;
+        }
+        
+        .atmosphere-toggle:hover { transform: translateY(-50%) scale(1.1); }
+        
+        .atmosphere-menu {
+            display: none;
+            position: fixed;
+            top: 50%;
+            right: 70px;
+            transform: translateY(-50%);
+            background: white;
+            border-radius: 15px;
+            padding: 0.5rem;
+            box-shadow: 0 4px 20px var(--shadow-strong);
+            z-index: 99;
+        }
+        
+        .atmosphere-menu.open { display: block; }
+        
+        .atmosphere-menu button {
+            display: block;
+            width: 100%;
+            padding: 0.6rem 1rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-align: left;
+            border-radius: 8px;
+        }
+        
+        .atmosphere-menu button:hover { background: var(--bg-warm); }
+        
+        /* Footer */
+        .site-footer {
+            background: var(--primary-dark);
+            color: rgba(255,255,255,0.8);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .site-footer p { font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+        
+        // Default Data
+        const defaultData = {
+            family: [
+                { role: '爸爸', name: '庞尚韬', birthday: '1979年6月30日', avatar: '', photos: [] },
+                { role: '妈妈', name: '陈冬燕', birthday: '1984年11月28日', avatar: '', photos: [] },
+                { role: '小宝贝', name: '庞云谦', birthday: '2018年10月13日（农历九月初五）', avatar: '', photos: [] }
+            ],
+            songs: [
+                { id: 1, name: '小星星', singer: '钢琴曲', url: './xiaoxingxing.mp3' },
+                { id: 2, name: '星星溜进来', singer: '轻快音乐', url: './xingxing.mp3' }
+            ],
+            carousel: [
+                { img: 'https://images.unsplash.com/photo-1544126592-807ade215a0b?w=1920&h=1080&fit=crop', badge: '记录成长', title: '庞云谦的家庭影集', subtitle: '用爱记录生活，用心收藏回忆。', info: ['生日：2018年10月13日'] },
+                { img: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=1920&h=1080&fit=crop', badge: '精彩瞬间', title: '成长的足迹', subtitle: '每一步都值得被铭记。', info: ['宁海金阳小学'] },
+                { img: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?w=1920&h=1080&fit=crop', badge: '快乐童年', title: '幸福时光', subtitle: '愿你永远保持纯真与好奇。', info: ['金阳小学一年级'] }
+            ],
+            timeline: [
+                { date: '2018年10月13日', age: '0岁', title: '庞云谦出生', desc: '农历九月初五，一个小生命来到这个世界。', stats: ['体重3.5kg'] },
+                { date: '2021年9月', age: '3岁', title: '上幼儿园啦', desc: '进入宁海县实验幼儿园同三校区。', stats: ['同三校区'] },
+                { date: '2024年9月', age: '6岁', title: '成为小学生', desc: '进入宁海金阳小学，成为一年级小学生！', stats: ['金阳小学'] }
+            ],
+            growth: {
+                labels: ['出生', '1岁', '3岁', '5岁', '7岁'],
+                height: [50, 76, 95, 112, 126],
+                weight: [3.5, 10.5, 16.5, 21.5, 26.5]
+            },
+            honor: [
+                { badge: '🏆', title: '小小画家', org: '幼儿园', date: '2022年', desc: '绘画比赛一等奖' },
+                { badge: '⭐', title: '全能小明星', org: '金阳小学', date: '2024年', desc: '全科优秀' }
+            ],
+            favorites: [
+                { name: '奥特曼', avatar: 'https://images.unsplash.com/photo-1609183590263-619fb60a1a84?w=200&h=200&fit=crop', desc: '喜欢迪迦奥特曼', tags: ['迪迦', '保护地球'] },
+                { name: '哪吒', avatar: 'https://images.unsplash.com/photo-1536240478700-b869ad10e2f3?w=200&h=200&fit=crop', desc: '我命由我不由天', tags: ['哪吒之魔童降世'] },
+                { name: '画画', avatar: 'https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=200&h=200&fit=crop', desc: '喜欢画奥特曼', tags: ['绘画'] }
+            ],
+            gallery: {
+                '日常': [{ id: 1, date: '2024年', title: '日常', img: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&h=450&fit=crop' }]
+            },
+            videos: [
+                { id: 1, title: '成长视频', date: '2024年', category: '日常', thumbnail: 'https://images.unsplash.com/photo-1536240478700-b869ad10e2f3?w=600&h=340&fit=crop', duration: '1:00' }
+            ],
+            milestones: [
+                { icon: '👶', age: '出生', title: '来到这个世界', desc: '2018年10月13日', img: 'https://images.unsplash.com/photo-1544126592-807ade215a0b?w=400&h=300&fit=crop' },
+                { icon: '📚', age: '6岁', title: '成为小学生', desc: '进入金阳小学', img: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=300&fit=crop' }
+            ]
+        };
+        
+        const ADMIN_PASSWORD = '123456';
+        const DATA_VERSION = 5;
+        
+        function loadData() {
+            try {
+                const saved = localStorage.getItem('familyAlbumData');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    // Ensure local music
+                    parsed.songs = [
+                        { id: 1, name: '小星星', singer: '钢琴曲', url: './xiaoxingxing.mp3' },
+                        { id: 2, name: '星星溜进来', singer: '轻快音乐', url: './xingxing.mp3' }
+                    ];
+                    parsed._version = DATA_VERSION;
+                    return parsed;
+                }
+                return defaultData;
+            } catch { return defaultData; }
+        }
+        
+        function saveData(data) {
+            localStorage.setItem('familyAlbumData', JSON.stringify(data));
+        }
+        
+        // Atmosphere Effect Component
+        function AtmosphereEffect({ type }) {
+            const canvasRef = useRef(null);
+            
+            useEffect(() => {
+                if (type === 'none') return;
+                
+                const canvas = canvasRef.current;
+                if (!canvas) return;
+                
+                const ctx = canvas.getContext('2d');
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                
+                let particles = [];
+                
+                const createParticle = () => {
+                    if (type === 'meteor') {
+                        return { x: Math.random() * canvas.width, y: -10, size: Math.random() * 2 + 1, speedY: Math.random() * 3 + 2, speedX: Math.random() * 2 + 1, opacity: 1 };
+                    } else if (type === 'rain') {
+                        return { x: Math.random() * canvas.width, y: -10, length: Math.random() * 20 + 10, speed: Math.random() * 5 + 5, opacity: Math.random() * 0.3 + 0.2 };
+                    } else {
+                        return { x: Math.random() * canvas.width, y: -10, size: Math.random() * 4 + 2, speedY: Math.random() * 1 + 0.5, speedX: Math.random() * 0.5 - 0.25, opacity: Math.random() * 0.5 + 0.3, wobble: Math.random() * Math.PI * 2 };
+                    }
+                };
+                
+                for (let i = 0; i < 50; i++) {
+                    particles.push(createParticle());
+                }
+                
+                const animate = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    particles.forEach((p, i) => {
+                        if (type === 'meteor') {
+                            ctx.beginPath();
+                            const gradient = ctx.createLinearGradient(p.x, p.y, p.x - p.speedX * 20, p.y + p.speedY * 20);
+                            gradient.addColorStop(0, `rgba(255,255,255,${p.opacity})`);
+                            gradient.addColorStop(1, 'transparent');
+                            ctx.strokeStyle = gradient;
+                            ctx.lineWidth = p.size;
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(p.x - p.speedX * 20, p.y + p.speedY * 20);
+                            ctx.stroke();
+                            p.x -= p.speedX * 10;
+                            p.y += p.speedY * 10;
+                        } else if (type === 'rain') {
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(150,180,255,${p.opacity})`;
+                            ctx.lineWidth = 1;
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(p.x - 1, p.y + p.length);
+                            ctx.stroke();
+                            p.y += p.speed;
+                            p.x -= 0.5;
+                        } else {
+                            ctx.beginPath();
+                            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                            ctx.fillStyle = `rgba(255,255,255,${p.opacity})`;
+                            ctx.fill();
+                            p.wobble += 0.05;
+                            p.x += Math.sin(p.wobble) * 0.5;
+                            p.y += p.speedY;
+                        }
+                        
+                        if (p.y > canvas.height + 20) {
+                            particles[i] = createParticle();
+                            particles[i].y = -10;
+                        }
+                    });
+                    
+                    requestAnimationFrame(animate);
+                };
+                
+                animate();
+                
+                return () => cancelAnimationFrame(animate);
+            }, [type]);
+            
+            if (type === 'none') return null;
+            return <canvas ref={canvasRef} className="atmosphere-canvas" />;
+        }
+        
+        // Navigation
+        function Navigation({ activeSection, onSectionChange, onAdminClick }) {
+            const sections = ['首页', '家人', '时间线', '发育', '荣誉', '爱好', '相册', '视频', '音乐'];
+            
+            return (
+                <nav className="nav">
+                    <div className="nav-inner">
+                        <div>
+                            <div className="nav-logo">庞云谦的家庭影集</div>
+                        </div>
+                        <ul className="nav-links">
+                            {sections.map(s => (
+                                <li key={s}>
+                                    <button className={`nav-link ${activeSection === s ? 'active' : ''}`} onClick={() => onSectionChange(s)}>
+                                        {s}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                        <button className="nav-admin" onClick={onAdminClick}>管理</button>
+                    </div>
+                </nav>
+            );
+        }
+        
+        // Hero Carousel
+        function HeroCarousel({ items }) {
+            const [current, setCurrent] = useState(0);
+            
+            useEffect(() => {
+                const timer = setInterval(() => {
+                    setCurrent(prev => (prev + 1) % items.length);
+                }, 5000);
+                return () => clearInterval(timer);
+            }, [items.length]);
+            
+            return (
+                <section className="hero">
+                    <div className="hero-slides">
+                        {items.map((item, idx) => (
+                            <div key={idx} className={`hero-slide ${idx === current ? 'active' : ''}`}>
+                                <img src={item.img} alt={item.title} />
+                                <div className="hero-overlay">
+                                    <span className="hero-badge">{item.badge}</span>
+                                    <h1 className="hero-title">{item.title}</h1>
+                                    <p className="hero-subtitle">{item.subtitle}</p>
+                                    <div className="hero-info">
+                                        {item.info?.map((info, i) => <span key={i}>{info}</span>)}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            );
+        }
+        
+        // Family Section
+        function FamilySection({ family }) {
+            return (
+                <section className="section" id="family">
+                    <h2 className="section-title">👨‍👩‍👧 家人</h2>
+                    <div className="family-grid">
+                        {family.map((member, idx) => (
+                            <div key={idx} className="family-card">
+                                <div className="family-avatar">
+                                    {member.avatar ? <img src={member.avatar} alt={member.name} /> : member.role === '爸爸' ? '👨' : member.role === '妈妈' ? '👩' : '👶'}
+                                </div>
+                                <div className="family-info">
+                                    <div className="family-role">{member.role}</div>
+                                    <div className="family-name">{member.name}</div>
+                                    <div className="family-birthday">{member.birthday}</div>
+                                    {member.photos?.length > 0 && (
+                                        <div style={{ marginTop: '0.8rem', display: 'flex', gap: '0.3rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                                            {member.photos.map((photo, i) => (
+                                                <img key={i} src={photo} style={{ width: '50px', height: '50px', borderRadius: '8px', objectFit: 'cover' }} alt="" />
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            );
+        }
+        
+        // Timeline Section
+        function TimelineSection({ timeline }) {
+            return (
+                <section className="section" id="timeline">
+                    <h2 className="section-title">📅 成长时间线</h2>
+                    <div className="timeline">
+                        {timeline.map((item, idx) => (
+                            <div key={idx} className="timeline-item">
+                                <div className="timeline-date">{item.date}</div>
+                                <div className="timeline-age">{item.age}</div>
+                                <h3 className="timeline-title">{item.title}</h3>
+                                <p className="timeline-desc">{item.desc}</p>
+                                {item.stats && (
+                                    <div className="timeline-stats">
+                                        {item.stats.map((stat, i) => <span key={i} className="timeline-stat">{stat}</span>)}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            );
+        }
+        
+        // Growth Chart Section
+        function GrowthSection({ growth }) {
+            const chartRef = useRef(null);
+            const chartInstance = useRef(null);
+            
+            useEffect(() => {
+                if (chartInstance.current) {
+                    chartInstance.current.destroy();
+                }
+                
+                const ctx = chartRef.current.getContext('2d');
+                chartInstance.current = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: growth.labels,
+                        datasets: [
+                            {
+                                label: '身高 (cm)',
+                                data: growth.height,
+                                borderColor: '#D4A574',
+                                backgroundColor: 'rgba(212, 165, 116, 0.2)',
+                                tension: 0.4,
+                                fill: true
+                            },
+                            {
+                                label: '体重 (kg)',
+                                data: growth.weight,
+                                borderColor: '#8B7355',
+                                backgroundColor: 'rgba(139, 115, 85, 0.2)',
+                                tension: 0.4,
+                                fill: true
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top' }
+                        },
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+                
+                return () => chartInstance.current?.destroy();
+            }, [growth]);
+            
+            return (
+                <section className="section" id="growth">
+                    <h2 className="section-title">📏📊 生长发育曲线</h2>
+                    <div className="growth-chart-container">
+                        <canvas ref={chartRef}></canvas>
+                    </div>
+                </section>
+            );
+        }
+        
+        // Honor Section
+        function HonorSection({ honor }) {
+            return (
+                <section className="section" id="honor">
+                    <h2 className="section-title">🏆 荣誉墙</h2>
+                    <div className="honor-grid">
+                        {honor.map((item, idx) => (
+                            <div key={idx} className="honor-card">
+                                <div className="honor-badge">{item.badge}</div>
+                                <div className="honor-content">
+                                    <h4>{item.title}</h4>
+                                    <div className="honor-org">{item.org}</div>
+                                    <div className="honor-date">{item.date}</div>
+                                    <div className="honor-desc">{item.desc}</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            );
+        }
+        
+        // Favorites Section
+        function FavoritesSection({ favorites }) {
+            return (
+                <section className="section" id="favorites">
+                    <h2 className="section-title">❤️ 喜爱的事物</h2>
+                    <div className="favorites-grid">
+                        {favorites.map((item, idx) => (
+                            <div key={idx} className="favorite-card">
+                                <img className="favorite-avatar" src={item.avatar} alt={item.name} />
+                                <div className="favorite-info">
+                                    <div className="favorite-name">{item.name}</div>
+                                    <div className="favorite-desc">{item.desc}</div>
+                                    <div className="favorite-tags">
+                                        {item.tags?.map((tag, i) => <span key={i} className="favorite-tag">{tag}</span>)}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            );
+        }
+        
+        // Gallery Section
+        function GallerySection({ gallery }) {
+            const [activeCategory, setActiveCategory] = useState(Object.keys(gallery)[0] || '');
+            
+            return (
+                <section className="section" id="gallery">
+                    <h2 className="section-title">📷 相册</h2>
+                    <div className="gallery-tabs">
+                        {Object.keys(gallery).map(cat => (
+                            <button key={cat} className={`gallery-tab ${activeCategory === cat ? 'active' : ''}`} onClick={() => setActiveCategory(cat)}>
+                                {cat}
+                            </button>
+                        ))}
+                    </div>
+                    <div className="gallery-grid">
+                        {gallery[activeCategory]?.map((item, idx) => (
+                            <div key={idx} className="gallery-item">
+                                <img src={item.img} alt={item.title} />
+                                <span className="gallery-item-title">{item.title}</span>
+                                <span className="gallery-item-date">{item.date}</span>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            );
+        }
+        
+        // Video Section
+        function VideoSection({ videos }) {
+            return (
+                <section className="section" id="videos">
+                    <h2 className="section-title">🎬 视频</h2>
+                    <div className="video-grid">
+                        {videos.map((video, idx) => (
+                            <div key={idx} className="video-card">
+                                <div className="video-thumbnail">
+                                    <img src={video.thumbnail} alt={video.title} />
+                                    <span className="video-duration">{video.duration}</span>
+                                </div>
+                                <div className="video-info">
+                                    <div className="video-title">{video.title}</div>
+                                    <div className="video-date">{video.date} · {video.category}</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            );
+        }
+        
+        // Music Player Component
+        function MusicPlayer({ songs, onSongsChange }) {
+            const [currentIdx, setCurrentIdx] = useState(0);
+            const [isPlaying, setIsPlaying] = useState(false);
+            const [progress, setProgress] = useState(0);
+            const [currentTime, setCurrentTime] = useState(0);
+            const [duration, setDuration] = useState(0);
+            const audioRef = useRef(null);
+            const fileInputRef = useRef(null);
+            
+            const currentSong = songs[currentIdx];
+            
+            const togglePlay = () => {
+                if (audioRef.current) {
+                    if (isPlaying) {
+                        audioRef.current.pause();
+                    } else {
+                        audioRef.current.play();
+                    }
+                    setIsPlaying(!isPlaying);
+                }
+            };
+            
+            const selectSong = (idx) => {
+                setCurrentIdx(idx);
+                setIsPlaying(true);
+            };
+            
+            const handleTimeUpdate = () => {
+                if (audioRef.current) {
+                    setCurrentTime(audioRef.current.currentTime);
+                    setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100 || 0);
+                }
+            };
+            
+            const handleLoadedMetadata = () => {
+                if (audioRef.current) {
+                    setDuration(audioRef.current.duration);
+                }
+            };
+            
+            const handleEnded = () => {
+                if (songs.length > 1) {
+                    setCurrentIdx((currentIdx + 1) % songs.length);
+                } else {
+                    setIsPlaying(false);
+                }
+            };
+            
+            const handleProgressClick = (e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const percent = (e.clientX - rect.left) / rect.width;
+                if (audioRef.current) {
+                    audioRef.current.currentTime = percent * duration;
+                }
+            };
+            
+            const formatTime = (time) => {
+                const mins = Math.floor(time / 60);
+                const secs = Math.floor(time % 60);
+                return `${mins}:${secs.toString().padStart(2, '0')}`;
+            };
+            
+            const handleFileUpload = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const url = URL.createObjectURL(file);
+                    const newSong = {
+                        id: Date.now(),
+                        name: file.name.replace(/\.[^/.]+$/, ''),
+                        singer: '本地音乐',
+                        url: url
+                    };
+                    onSongsChange([...songs, newSong]);
+                    setCurrentIdx(songs.length);
+                }
+            };
+            
+            useEffect(() => {
+                if (audioRef.current && currentSong?.url) {
+                    audioRef.current.src = currentSong.url;
+                    if (isPlaying) {
+                        audioRef.current.play().catch(() => setIsPlaying(false));
+                    }
+                }
+            }, [currentIdx, currentSong]);
+            
+            return (
+                <section className="section" id="music">
+                    <h2 className="section-title">🎵 音乐盒</h2>
+                    <div className="music-player">
+                        <div className="music-header">
+                            <h3>🎶 正在播放</h3>
+                        </div>
+                        
+                        <div className="music-now">
+                            <div className="music-album">
+                                <span className="music-album-icon">🎵</span>
+                            </div>
+                            <div className="music-title">{currentSong?.name}</div>
+                            <div className="music-artist">{currentSong?.singer}</div>
+                        </div>
+                        
+                        <audio ref={audioRef} onTimeUpdate={handleTimeUpdate} onLoadedMetadata={handleLoadedMetadata} onEnded={handleEnded} />
+                        
+                        <div className="music-progress">
+                            <div className="music-progress-bar" onClick={handleProgressClick}>
+                                <div className="music-progress-fill" style={{ width: `${progress}%` }}></div>
+                            </div>
+                            <div className="music-time">
+                                <span>{formatTime(currentTime)}</span>
+                                <span>{formatTime(duration)}</span>
+                            </div>
+                        </div>
+                        
+                        <div className="music-controls">
+                            <button className="music-ctrl" onClick={() => selectSong((currentIdx - 1 + songs.length) % songs.length)}>⏮</button>
+                            <button className="music-ctrl play" onClick={togglePlay}>{isPlaying ? '⏸' : '▶'}</button>
+                            <button className="music-ctrl" onClick={() => selectSong((currentIdx + 1) % songs.length)}>⏭</button>
+                        </div>
+                        
+                        <div className="music-playlist">
+                            <div className="music-playlist-title">点击选择歌曲（共{songs.length}首）</div>
+                            {songs.map((song, idx) => (
+                                <div key={song.id} className={`music-song ${idx === currentIdx ? 'active' : ''}`} onClick={() => selectSong(idx)}>
+                                    <div className="music-song-num">{idx === currentIdx && isPlaying ? '🔊' : idx + 1}</div>
+                                    <div className="music-song-info">
+                                        <div className="music-song-name">{song.name}</div>
+                                        <div className="music-song-singer">{song.singer}</div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        
+                        <div className="music-upload">
+                            <input type="file" ref={fileInputRef} accept="audio/*" onChange={handleFileUpload} />
+                            <button className="music-upload-btn" onClick={() => fileInputRef.current?.click()}>
+                                📂 上传本地音乐
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+                        <a href="./mobile.html" style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '0.9rem' }}>
+                            📱 手机版音乐播放器 →
+                        </a>
+                    </div>
+                </section>
+            );
+        }
+        
+        // Milestones Section
+        function MilestonesSection({ milestones }) {
+            return (
+                <section className="section" id="milestones">
+                    <h2 className="section-title">✨ 成长里程碑</h2>
+                    <div className="milestones-grid">
+                        {milestones.map((item, idx) => (
+                            <div key={idx} className="milestone-card">
+                                <img src={item.img} alt={item.title} />
+                                <div className="milestone-overlay">
+                                    <div className="milestone-icon">{item.icon}</div>
+                                    <div className="milestone-age">{item.age}</div>
+                                    <div className="milestone-title">{item.title}</div>
+                                    <div className="milestone-desc">{item.desc}</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            );
+        }
+        
+        // Admin Panel
+        function AdminPanel({ data, onClose, onSave }) {
+            const [editData, setEditData] = useState(data);
+            const [activeTab, setActiveTab] = useState('家人');
+            const [password, setPassword] = useState('');
+            const [isAuthenticated, setIsAuthenticated] = useState(false);
+            const [githubToken, setGithubToken] = useState(localStorage.getItem('githubToken') || '');
+            const [uploading, setUploading] = useState(false);
+            
+            const tabs = ['家人', '音乐', '轮播', '时间线', '发育', '荣誉', '爱好', '相册', '视频', '里程碑'];
+            
+            // GitHub上传函数
+            const uploadToGitHub = async (file, category) => {
+                if (!githubToken) {
+                    alert('请先设置 GitHub Token');
+                    return null;
+                }
+                
+                const owner = 'shangtaopang-svg';
+                const repo = 'family-album';
+                const timestamp = Date.now();
+                const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+                const path = `photos/${category}/${timestamp}-${safeName}`;
+                
+                const base64 = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result.split(',')[1]);
+                    reader.readAsDataURL(file);
+                });
+                
+                try {
+                    // 检查文件是否已存在
+                    const checkRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                        headers: { 'Authorization': `token ${githubToken}` }
+                    });
+                    
+                    let sha = null;
+                    if (checkRes.ok) {
+                        const existing = await checkRes.json();
+                        sha = existing.sha;
+                    }
+                    
+                    // 上传文件
+                    const body = {
+                        message: `Upload ${category}/${file.name}`,
+                        content: base64
+                    };
+                    if (sha) body.sha = sha;
+                    
+                    const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `token ${githubToken}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(body)
+                    });
+                    
+                    if (res.ok) {
+                        const data = await res.json();
+                        return data.content.download_url;
+                    } else {
+                        console.error('Upload failed:', await res.text());
+                        return null;
+                    }
+                } catch (err) {
+                    console.error('Upload error:', err);
+                    return null;
+                }
+            };
+            
+            const handleGalleryUpload = async (category, e) => {
+                const files = Array.from(e.target.files);
+                setUploading(true);
+                
+                for (const file of files) {
+                    if (githubToken) {
+                        // GitHub上传模式
+                        const url = await uploadToGitHub(file, category);
+                        if (url) {
+                            const newItem = {
+                                id: Date.now() + Math.random(),
+                                date: new Date().toLocaleDateString('zh-CN'),
+                                title: file.name.replace(/\.[^/.]+$/, ''),
+                                img: url
+                            };
+                            setEditData(prev => ({
+                                ...prev,
+                                gallery: {
+                                    ...prev.gallery,
+                                    [category]: [...(prev.gallery[category] || []), newItem]
+                                }
+                            }));
+                        } else {
+                            // 回退到本地
+                            const reader = new FileReader();
+                            reader.onload = (ev) => {
+                                const newItem = {
+                                    id: Date.now() + Math.random(),
+                                    date: new Date().toLocaleDateString('zh-CN'),
+                                    title: file.name.replace(/\.[^/.]+$/, ''),
+                                    img: ev.target.result
+                                };
+                                setEditData(prev => ({
+                                    ...prev,
+                                    gallery: {
+                                        ...prev.gallery,
+                                        [category]: [...(prev.gallery[category] || []), newItem]
+                                    }
+                                }));
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    } else {
+                        // 本地上传模式
+                        const reader = new FileReader();
+                        reader.onload = (ev) => {
+                            const newItem = {
+                                id: Date.now() + Math.random(),
+                                date: new Date().toLocaleDateString('zh-CN'),
+                                title: file.name.replace(/\.[^/.]+$/, ''),
+                                img: ev.target.result
+                            };
+                            setEditData(prev => ({
+                                ...prev,
+                                gallery: {
+                                    ...prev.gallery,
+                                    [category]: [...(prev.gallery[category] || []), newItem]
+                                }
+                            }));
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }
+                setUploading(false);
+            };
+            
+            const handleAuth = () => {
+                if (password === ADMIN_PASSWORD) {
+                    setIsAuthenticated(true);
+                } else {
+                    alert('密码错误');
+                }
+            };
+            
+            const handleSaveGithubToken = () => {
+                localStorage.setItem('githubToken', githubToken);
+                alert('GitHub Token 已保存！上传照片将自动同步到 GitHub 仓库。');
+            };
+            
+            const updateField = (section, idx, field, value) => {
+                const newData = { ...editData };
+                if (idx !== undefined) {
+                    newData[section][idx] = { ...newData[section][idx], [field]: value };
+                } else {
+                    newData[section] = { ...editData[section], [field]: value };
+                }
+                setEditData(newData);
+            };
+            
+            const removeItem = (section, idx) => {
+                const newData = { ...editData };
+                newData[section] = newData[section].filter((_, i) => i !== idx);
+                setEditData(newData);
+            };
+            
+            const addItem = (section, template) => {
+                const newData = { ...editData };
+                newData[section] = [...newData[section], { ...template, id: Date.now() }];
+                setEditData(newData);
+            };
+            
+            const handleImageUpload = (section, idx, field, e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        updateField(section, idx, field, ev.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            
+            const handleFamilyPhotoUpload = async (memberIdx, e) => {
+                const files = Array.from(e.target.files);
+                setUploading(true);
+                const newPhotos = [...(editData.family[memberIdx].photos || [])];
+                
+                for (const file of files) {
+                    if (githubToken) {
+                        const url = await uploadToGitHub(file, 'family');
+                        if (url) {
+                            newPhotos.push(url);
+                        } else {
+                            const reader = new FileReader();
+                            reader.onload = (ev) => newPhotos.push(ev.target.result);
+                            reader.readAsDataURL(file);
+                        }
+                    } else {
+                        const reader = new FileReader();
+                        reader.onload = (ev) => newPhotos.push(ev.target.result);
+                        reader.readAsDataURL(file);
+                    }
+                }
+                
+                setTimeout(() => {
+                    setEditData(prev => {
+                        const updated = [...prev.family];
+                        updated[memberIdx] = { ...updated[memberIdx], photos: [...newPhotos] };
+                        return { ...prev, family: updated };
+                    });
+                }, files.length * 100);
+                setUploading(false);
+            };
+            
+            const handleGalleryUpload = (category, e) => {
+                const files = Array.from(e.target.files);
+                const newItems = [...(editData.gallery[category] || [])];
+                files.forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        newItems.push({
+                            id: Date.now() + Math.random(),
+                            date: new Date().toLocaleDateString('zh-CN'),
+                            title: file.name.replace(/\.[^/.]+$/, ''),
+                            img: ev.target.result
+                        });
+                        setEditData(prev => ({
+                            ...prev,
+                            gallery: { ...prev.gallery, [category]: [...newItems] }
+                        }));
+                    };
+                    reader.readAsDataURL(file);
+                });
+            };
+            
+            const handleSave = () => {
+                onSave(editData);
+                alert('保存成功！');
+            };
+            
+            if (!isAuthenticated) {
+                return (
+                    <div className="admin-modal open">
+                        <div className="admin-content" style={{ textAlign: 'center', maxWidth: '400px', margin: '10rem auto' }}>
+                            <h2 style={{ marginBottom: '1.5rem', color: 'var(--primary)' }}>🔐 请输入管理密码</h2>
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
+                                onKeyDown={e => e.key === 'Enter' && handleAuth()}
+                                placeholder="请输入密码"
+                                className="admin-input"
+                                style={{ width: '100%', marginBottom: '1rem', textAlign: 'center' }}
+                            />
+                            <button className="admin-btn admin-btn-save" style={{ width: '100%' }} onClick={handleAuth}>确认</button>
+                            <button className="admin-close" style={{ position: 'absolute', top: '1rem', right: '1rem' }} onClick={onClose}>×</button>
+                        </div>
+                    </div>
+                );
+            }
+            
+            return (
+                <div className="admin-modal open">
+                    <div className="admin-content">
+                        <div className="admin-header">
+                            <h2>⚙️ 后台管理</h2>
+                            <button className="admin-close" onClick={onClose}>×</button>
+                        </div>
+                        
+                        <div className="admin-tabs">
+                            {tabs.map(tab => (
+                                <button key={tab} className={`admin-tab ${activeTab === tab ? 'active' : ''}`} onClick={() => setActiveTab(tab)}>
+                                    {tab}
+                                </button>
+                            ))}
+                        </div>
+                        
+                        {isAuthenticated && (
+                            <div className="admin-section" style={{ marginBottom: '1rem', background: '#fff5e6' }}>
+                                <h3 className="admin-section-title" style={{ color: 'var(--accent)' }}>🔗 GitHub 云同步</h3>
+                                <p style={{ fontSize: '0.85rem', color: 'var(--text-medium)', marginBottom: '0.8rem' }}>
+                                    设置 GitHub Token 后，上传的照片将自动同步到仓库，所有设备都能看到。
+                                </p>
+                                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                    <input
+                                        type="password"
+                                        className="admin-input"
+                                        value={githubToken}
+                                        onChange={e => setGithubToken(e.target.value)}
+                                        placeholder="粘贴 GitHub Token..."
+                                        style={{ flex: 1 }}
+                                    />
+                                    <button className="admin-btn admin-btn-save" onClick={handleSaveGithubToken}>保存</button>
+                                </div>
+                                {githubToken && <p style={{ fontSize: '0.75rem', color: 'var(--text-light)', marginTop: '0.5rem' }}>✓ Token 已设置，照片将自动同步到 GitHub</p>}
+                            </div>
+                        )}
+                        
+                        {activeTab === '家人' && (
+                            <div>
+                                <h3 className="admin-section-title">👨‍👩‍👧 家人信息</h3>
+                                {editData.family.map((member, idx) => (
+                                    <div key={idx} className="admin-item">
+                                        <div style={{ textAlign: 'center' }}>
+                                            {member.avatar ? <img src={member.avatar} alt="" /> : <div style={{ width: '60px', height: '60px', background: 'var(--bg-cream)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>👤</div>}
+                                            <input type="file" accept="image/*" id={`avatar-${idx}`} style={{ display: 'none' }} onChange={e => handleImageUpload('family', idx, 'avatar', e)} />
+                                            <label htmlFor={`avatar-${idx}`} className="admin-upload-label" style={{ fontSize: '0.7rem', marginTop: '0.3rem', display: 'block' }}>头像</label>
+                                        </div>
+                                        <div className="admin-item-fields">
+                                            <input className="admin-input" value={member.role} onChange={e => updateField('family', idx, 'role', e.target.value)} placeholder="角色" />
+                                            <input className="admin-input" value={member.name} onChange={e => updateField('family', idx, 'name', e.target.value)} placeholder="姓名" />
+                                            <input className="admin-input" value={member.birthday} onChange={e => updateField('family', idx, 'birthday', e.target.value)} placeholder="生日" />
+                                        </div>
+                                        <button className="admin-btn admin-btn-danger" onClick={() => removeItem('family', idx)}>删除</button>
+                                    </div>
+                                ))}
+                                <button className="admin-btn admin-btn-add" onClick={() => addItem('family', { role: '新成员', name: '姓名', birthday: '生日', avatar: '', photos: [] })}>+ 添加成员</button>
+                                
+                                <h3 className="admin-section-title" style={{ marginTop: '1.5rem' }}>📸 家人照片</h3>
+                                {editData.family.map((member, idx) => (
+                                    <div key={idx} className="admin-section" style={{ marginBottom: '1rem' }}>
+                                        <div style={{ fontWeight: 600, marginBottom: '0.5rem' }}>{member.name}</div>
+                                        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
+                                            {member.photos?.map((photo, i) => (
+                                                <div key={i} style={{ position: 'relative' }}>
+                                                    <img src={photo} alt="" style={{ width: '60px', height: '60px', borderRadius: '8px', objectFit: 'cover' }} />
+                                                    <button onClick={() => {
+                                                        const newPhotos = [...member.photos];
+                                                        newPhotos.splice(i, 1);
+                                                        updateField('family', idx, 'photos', newPhotos);
+                                                    }} style={{ position: 'absolute', top: '-5px', right: '-5px', width: '20px', height: '20px', borderRadius: '50%', background: 'red', color: 'white', border: 'none', cursor: 'pointer', fontSize: '12px' }}>×</button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <input type="file" accept="image/*" multiple id={`photos-${idx}`} style={{ display: 'none' }} onChange={e => handleFamilyPhotoUpload(idx, e)} />
+                                        <label htmlFor={`photos-${idx}`} className="admin-upload-label" style={{ cursor: 'pointer' }}>+ 上传照片</label>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        
+                        {activeTab === '音乐' && (
+                            <div>
+                                <h3 className="admin-section-title">🎵 音乐列表（{editData.songs.length}首）</h3>
+                                {editData.songs.map((song, idx) => (
+                                    <div key={song.id} className="admin-item">
+                                        <div className="admin-item-fields">
+                                            <input className="admin-input" value={song.name} onChange={e => updateField('songs', idx, 'name', e.target.value)} placeholder="歌曲名" />
+                                            <input className="admin-input" value={song.singer} onChange={e => updateField('songs', idx, 'singer', e.target.value)} placeholder="歌手" />
+                                            <input className="admin-input" value={song.url} onChange={e => updateField('songs', idx, 'url', e.target.value)} placeholder="音乐链接" />
+                                        </div>
+                                        <button className="admin-btn admin-btn-danger" onClick={() => removeItem('songs', idx)}>删除</button>
+                                    </div>
+                                ))}
+                                <button className="admin-btn admin-btn-add" onClick={() => addItem('songs', { id: Date.now(), name: '新歌曲', singer: '歌手', url: '' })}>+ 添加歌曲</button>
+                            </div>
+                        )}
+                        
+                        {activeTab === '轮播' && (
+                            <div>
+                                <h3 className="admin-section-title">🖼️ 轮播图片</h3>
+                                {editData.carousel.map((item, idx) => (
+                                    <div key={idx} className="admin-item">
+                                        <img src={item.img} alt="" style={{ width: '100px', height: '60px', objectFit: 'cover', borderRadius: '8px' }} />
+                                        <div className="admin-item-fields">
+                                            <input className="admin-input" value={item.badge} onChange={e => updateField('carousel', idx, 'badge', e.target.value)} placeholder="标签" />
+                                            <input className="admin-input" value={item.title} onChange={e => updateField('carousel', idx, 'title', e.target.value)} placeholder="标题" />
+                                            <input className="admin-input" value={item.subtitle} onChange={e => updateField('carousel', idx, 'subtitle', e.target.value)} placeholder="副标题" />
+                                            <input className="admin-input" value={item.img} onChange={e => updateField('carousel', idx, 'img', e.target.value)} placeholder="图片URL" />
+                                        </div>
+                                        <button className="admin-btn admin-btn-danger" onClick={() => removeItem('carousel', idx)}>删除</button>
+                                    </div>
+                                ))}
+                                <button className="admin-btn admin-btn-add" onClick={() => addItem('carousel', { img: '', badge: '新图片', title: '标题', subtitle: '副标题', info: [] })}>+ 添加轮播</button>
+                            </div>
+                        )}
+                        
+                        {activeTab === '时间线' && (
+                            <div>
+                                <h3 className="admin-section-title">📅 成长时间线</h3>
+                                {editData.timeline.map((item, idx) => (
+                                    <div key={idx} className="admin-item">
+                                        <div className="admin-item-fields">
+                                            <input className="admin-input" value={item.date} onChange={e => updateField('timeline', idx, 'date', e.target.value)} placeholder="日期" />
+                                            <input className="admin-input" value={item.age} onChange={e => updateField('timeline', idx, 'age', e.target.value)} placeholder="年龄" />
+                                            <input className="admin-input" value={item.title} onChange={e => updateField('timeline', idx, 'title', e.target.value)} placeholder="标题" />
+                                            <input className="admin-input" value={item.desc} onChange={e => updateField('timeline', idx, 'desc', e.target.value)} placeholder="描述" />
+                                        </div>
+                                        <button className="admin-btn admin-btn-danger" onClick={() => removeItem('timeline', idx)}>删除</button>
+                                    </div>
+                                ))}
+                                <button className="admin-btn admin-btn-add" onClick={() => addItem('timeline', { date: '2025年', age: '7岁', title: '新事件', desc: '描述', stats: [] })}>+ 添加事件</button>
+                            </div>
+                        )}
+                        
+                        {activeTab === '发育' && (
+                            <div>
+                                <h3 className="admin-section-title">📏📊 生长发育数据</h3>
+                                <div className="admin-section">
+                                    <div style={{ marginBottom: '1rem' }}>年龄段标签（用逗号分隔）</div>
+                                    <input className="admin-input" style={{ width: '100%', marginBottom: '1rem' }} value={editData.growth.labels.join(',')} onChange={e => updateField('growth', undefined, 'labels', e.target.value.split(','))} />
+                                    
+                                    <div style={{ marginBottom: '1rem' }}>身高数据（用逗号分隔）</div>
+                                    <input className="admin-input" style={{ width: '100%', marginBottom: '1rem' }} value={editData.growth.height.join(',')} onChange={e => updateField('growth', undefined, 'height', e.target.value.split(',').map(Number))} />
+                                    
+                                    <div>体重数据（用逗号分隔）</div>
+                                    <input className="admin-input" style={{ width: '100%' }} value={editData.growth.weight.join(',')} onChange={e => updateField('growth', undefined, 'weight', e.target.value.split(',').map(Number))} />
+                                </div>
+                            </div>
+                        )}
+                        
+                        {activeTab === '荣誉' && (
+                            <div>
+                                <h3 className="admin-section-title">🏆 荣誉墙</h3>
+                                {editData.honor.map((item, idx) => (
+                                    <div key={idx} className="admin-item">
+                                        <div style={{ fontSize: '2rem' }}>{item.badge}</div>
+                                        <div className="admin-item-fields">
+                                            <input className="admin-input" value={item.badge} onChange={e => updateField('honor', idx, 'badge', e.target.value)} placeholder="图标" />
+                                            <input className="admin-input" value={item.title} onChange={e => updateField('honor', idx, 'title', e.target.value)} placeholder="荣誉名称" />
+                                            <input className="admin-input" value={item.org} onChange={e => updateField('honor', idx, 'org', e.target.value)} placeholder="组织" />
+                                            <input className="admin-input" value={item.date} onChange={e => updateField('honor', idx, 'date', e.target.value)} placeholder="日期" />
+                                            <input className="admin-input" value={item.desc} onChange={e => updateField('honor', idx, 'desc', e.target.value)} placeholder="描述" />
+                                        </div>
+                                        <button className="admin-btn admin-btn-danger" onClick={() => removeItem('honor', idx)}>删除</button>
+                                    </div>
+                                ))}
+                                <button className="admin-btn admin-btn-add" onClick={() => addItem('honor', { badge: '🏆', title: '新荣誉', org: '组织', date: '2024年', desc: '描述' })}>+ 添加荣誉</button>
+                            </div>
+                        )}
+                        
+                        {activeTab === '爱好' && (
+                            <div>
+                                <h3 className="admin-section-title">❤️ 喜爱事物</h3>
+                                {editData.favorites.map((item, idx) => (
+                                    <div key={idx} className="admin-item">
+                                        <img src={item.avatar} alt="" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px' }} />
+                                        <div className="admin-item-fields">
+                                            <input type="file" accept="image/*" id={`fav-img-${idx}`} style={{ display: 'none' }} onChange={e => handleImageUpload('favorites', idx, 'avatar', e)} />
+                                            <label htmlFor={`fav-img-${idx}`} className="admin-upload-label" style={{ cursor: 'pointer' }}>更换图片</label>
+                                            <input className="admin-input" value={item.name} onChange={e => updateField('favorites', idx, 'name', e.target.value)} placeholder="名称" />
+                                            <input className="admin-input" value={item.desc} onChange={e => updateField('favorites', idx, 'desc', e.target.value)} placeholder="描述" />
+                                        </div>
+                                        <button className="admin-btn admin-btn-danger" onClick={() => removeItem('favorites', idx)}>删除</button>
+                                    </div>
+                                ))}
+                                <button className="admin-btn admin-btn-add" onClick={() => addItem('favorites', { name: '新事物', avatar: '', desc: '描述', tags: [] })}>+ 添加爱好</button>
+                            </div>
+                        )}
+                        
+                        {activeTab === '相册' && (
+                            <div>
+                                <h3 className="admin-section-title">📷 相册管理</h3>
+                                {Object.keys(editData.gallery).map(category => (
+                                    <div key={category} className="admin-section">
+                                        <div style={{ fontWeight: 600, marginBottom: '0.5rem' }}>{category}</div>
+                                        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
+                                            {editData.gallery[category]?.map((item, idx) => (
+                                                <div key={idx} style={{ position: 'relative' }}>
+                                                    <img src={item.img} alt="" style={{ width: '80px', height: '60px', objectFit: 'cover', borderRadius: '8px' }} />
+                                                    <button onClick={() => {
+                                                        const newItems = editData.gallery[category].filter((_, i) => i !== idx);
+                                                        setEditData(prev => ({ ...prev, gallery: { ...prev.gallery, [category]: newItems } }));
+                                                    }} style={{ position: 'absolute', top: '-5px', right: '-5px', width: '20px', height: '20px', borderRadius: '50%', background: 'red', color: 'white', border: 'none', cursor: 'pointer', fontSize: '12px' }}>×</button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <input type="file" accept="image/*" multiple id={`gallery-${category}`} style={{ display: 'none' }} onChange={e => handleGalleryUpload(category, e)} />
+                                        <label htmlFor={`gallery-${category}`} className="admin-upload-label" style={{ cursor: 'pointer' }}>
+                                            {uploading ? '⏳ 上传中...' : '+ 上传照片'}
+                                        </label>
+                                    </div>
+                                ))}
+                                <button className="admin-btn admin-btn-add" style={{ marginTop: '1rem' }} onClick={() => {
+                                    const newCat = prompt('请输入新分类名称：');
+                                    if (newCat) {
+                                        setEditData(prev => ({ ...prev, gallery: { ...prev.gallery, [newCat]: [] } }));
+                                    }
+                                }}>+ 添加分类</button>
+                            </div>
+                        )}
+                        
+                        {activeTab === '视频' && (
+                            <div>
+                                <h3 className="admin-section-title">🎬 视频管理</h3>
+                                {editData.videos.map((item, idx) => (
+                                    <div key={idx} className="admin-item">
+                                        <img src={item.thumbnail} alt="" style={{ width: '80px', height: '45px', objectFit: 'cover', borderRadius: '8px' }} />
+                                        <div className="admin-item-fields">
+                                            <input className="admin-input" value={item.title} onChange={e => updateField('videos', idx, 'title', e.target.value)} placeholder="标题" />
+                                            <input className="admin-input" value={item.date} onChange={e => updateField('videos', idx, 'date', e.target.value)} placeholder="日期" />
+                                            <input className="admin-input" value={item.category} onChange={e => updateField('videos', idx, 'category', e.target.value)} placeholder="分类" />
+                                            <input className="admin-input" value={item.duration} onChange={e => updateField('videos', idx, 'duration', e.target.value)} placeholder="时长" />
+                                            <input className="admin-input" value={item.thumbnail} onChange={e => updateField('videos', idx, 'thumbnail', e.target.value)} placeholder="封面URL" />
+                                        </div>
+                                        <button className="admin-btn admin-btn-danger" onClick={() => removeItem('videos', idx)}>删除</button>
+                                    </div>
+                                ))}
+                                <button className="admin-btn admin-btn-add" onClick={() => addItem('videos', { id: Date.now(), title: '新视频', date: '2024年', category: '日常', thumbnail: '', duration: '0:00' })}>+ 添加视频</button>
+                            </div>
+                        )}
+                        
+                        {activeTab === '里程碑' && (
+                            <div>
+                                <h3 className="admin-section-title">✨ 成长里程碑</h3>
+                                {editData.milestones.map((item, idx) => (
+                                    <div key={idx} className="admin-item">
+                                        <img src={item.img} alt="" style={{ width: '80px', height: '60px', objectFit: 'cover', borderRadius: '8px' }} />
+                                        <div className="admin-item-fields">
+                                            <input className="admin-input" value={item.icon} onChange={e => updateField('milestones', idx, 'icon', e.target.value)} placeholder="图标" />
+                                            <input className="admin-input" value={item.age} onChange={e => updateField('milestones', idx, 'age', e.target.value)} placeholder="年龄" />
+                                            <input className="admin-input" value={item.title} onChange={e => updateField('milestones', idx, 'title', e.target.value)} placeholder="标题" />
+                                            <input className="admin-input" value={item.desc} onChange={e => updateField('milestones', idx, 'desc', e.target.value)} placeholder='描述' />
+                                            <input className="admin-input" value={item.img} onChange={e => updateField('milestones', idx, 'img', e.target.value)} placeholder="图片URL" />
+                                        </div>
+                                        <button className="admin-btn admin-btn-danger" onClick={() => removeItem('milestones', idx)}>删除</button>
+                                    </div>
+                                ))}
+                                <button className="admin-btn admin-btn-add" onClick={() => addItem('milestones', { icon: '⭐', age: '年龄', title: '标题', desc: '描述', img: '' })}>+ 添加里程碑</button>
+                            </div>
+                        )}
+                        
+                        <div style={{ marginTop: '2rem', textAlign: 'center' }}>
+                            <button className="admin-btn admin-btn-save" style={{ padding: '1rem 3rem', fontSize: '1rem' }} onClick={handleSave}>
+                                保存所有更改
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        
+        // Main App
+        function App() {
+            const [data, setData] = useState(loadData);
+            const [activeSection, setActiveSection] = useState('首页');
+            const [showAdmin, setShowAdmin] = useState(false);
+            const [atmosphere, setAtmosphere] = useState('none');
+            const [showAtmoMenu, setShowAtmoMenu] = useState(false);
+            
+            const handleSave = (newData) => {
+                setData(newData);
+                saveData(newData);
+                setShowAdmin(false);
+            };
+            
+            const handleSongsChange = (songs) => {
+                const newData = { ...data, songs };
+                setData(newData);
+                saveData(newData);
+            };
+            
+            return (
+                <div>
+                    <AtmosphereEffect type={atmosphere} />
+                    
+                    <Navigation activeSection={activeSection} onSectionChange={setActiveSection} onAdminClick={() => setShowAdmin(true)} />
+                    
+                    {activeSection === '首页' && <HeroCarousel items={data.carousel} />}
+                    
+                    <main className="main">
+                        {activeSection === '首页' && (
+                            <>
+                                <FamilySection family={data.family} />
+                                <TimelineSection timeline={data.timeline} />
+                                <GrowthSection growth={data.growth} />
+                                <HonorSection honor={data.honor} />
+                                <FavoritesSection favorites={data.favorites} />
+                                <MilestonesSection milestones={data.milestones} />
+                                <GallerySection gallery={data.gallery} />
+                                <VideoSection videos={data.videos} />
+                                <MusicPlayer songs={data.songs} onSongsChange={handleSongsChange} />
+                            </>
+                        )}
+                        {activeSection === '家人' && <FamilySection family={data.family} />}
+                        {activeSection === '时间线' && <TimelineSection timeline={data.timeline} />}
+                        {activeSection === '发育' && <GrowthSection growth={data.growth} />}
+                        {activeSection === '荣誉' && <HonorSection honor={data.honor} />}
+                        {activeSection === '爱好' && <FavoritesSection favorites={data.favorites} />}
+                        {activeSection === '相册' && <GallerySection gallery={data.gallery} />}
+                        {activeSection === '视频' && <VideoSection videos={data.videos} />}
+                        {activeSection === '音乐' && <MusicPlayer songs={data.songs} onSongsChange={handleSongsChange} />}
+                    </main>
+                    
+                    <footer className="site-footer">
+                        <p>用爱记录生活，用心收藏回忆 💝</p>
+                        <p style={{ marginTop: '0.5rem', fontSize: '0.8rem', opacity: 0.7 }}>庞云谦的家庭影集</p>
+                    </footer>
+                    
+                    <a href="./mobile.html" className="mobile-music-link">🎵 手机音乐</a>
+                    
+                    <button className="atmosphere-toggle" onClick={() => setShowAtmoMenu(!showAtmoMenu)}>✨</button>
+                    <div className={`atmosphere-menu ${showAtmoMenu ? 'open' : ''}`}>
+                        <button onClick={() => { setAtmosphere('none'); setShowAtmoMenu(false); }}>关</button>
+                        <button onClick={() => { setAtmosphere('meteor'); setShowAtmoMenu(false); }}>🌠 流星雨</button>
+                        <button onClick={() => { setAtmosphere('rain'); setShowAtmoMenu(false); }}>🌧️ 下雨</button>
+                        <button onClick={() => { setAtmosphere('snow'); setShowAtmoMenu(false); }}>❄️ 下雪</button>
+                    </div>
+                    
+                    {showAdmin && <AdminPanel data={data} onClose={() => setShowAdmin(false)} onSave={handleSave} />}
+                </div>
+            );
+        }
+        
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>
